@@ -2,6 +2,7 @@ import React from 'react';
 import { uniqueId } from '../../util/id_generator'
 import merge from 'lodash/merge';
 import isEmpty from 'lodash/isEmpty';
+import EventDetail from './event_detail'
 
 class EventList extends React.Component {
   constructor(props) {
@@ -9,8 +10,8 @@ class EventList extends React.Component {
 
     this.state = {
       events: this.props.event,
-      search: ''
-
+      search: '',
+      eventDetailKey: ''
     }
 
   }
@@ -112,28 +113,22 @@ class EventList extends React.Component {
       }
     })
     let filteredEventKeys = Object.keys(filteredEvents)
-    console.log(filteredEventKeys)
-    console.log(this.state)
+    
     return filteredEventKeys
   }
 
   getEventDetails(event){
-    console.log(event)
-
+    this.setState({eventDetailKey: event})
   }
-
-
 
   render() {
     let data = this.state.events
-    
     
     if (!data) {
       return (
         <div>hello</div>
       )
     } else {
-      // console.log(this.state)
       let size = data.events.length
       let eventLib = this.state.eventKeys
       let eventScores = this.state.eventScores
@@ -153,18 +148,23 @@ class EventList extends React.Component {
               {
                 filteredEvents.map(event => {
                   return(
-                    <li className="list-items" key={`${event}+${uniqueId()}`}>
-                      <p>{event}</p>
-                      <a onClick={() => this.getEventDetails(event)}><img src={eventLib[event]} alt="" /></a>
-                    </li>
+                    <div>
+                      <li className="list-items" key={`${event}+${uniqueId()}`}>
+                        <p>{event}</p>
+                        <a onClick={() => this.getEventDetails(event)}><img src={eventLib[event]} alt="" /></a>
+                      </li>
+                    </div>
                   )
                 })
               }
             </ul>
-
-            <ul id="event-details">
-
-            </ul>
+            <EventDetail
+              allEvents={this.state.events.events}
+              eventName={this.state.eventDetailKey}
+              eventLib={eventLib} 
+              eventScores={eventScores} 
+              eventKeys={eventKeys}
+            />
           </div>
         </div>
       );

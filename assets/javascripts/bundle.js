@@ -28543,6 +28543,10 @@ var _isEmpty = __webpack_require__(338);
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
+var _event_detail = __webpack_require__(346);
+
+var _event_detail2 = _interopRequireDefault(_event_detail);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -28563,8 +28567,8 @@ var EventList = function (_React$Component) {
 
     _this.state = {
       events: _this.props.event,
-      search: ''
-
+      search: '',
+      eventDetailKey: ''
     };
 
     return _this;
@@ -28665,14 +28669,13 @@ var EventList = function (_React$Component) {
         }
       });
       var filteredEventKeys = Object.keys(filteredEvents);
-      console.log(filteredEventKeys);
-      console.log(this.state);
+
       return filteredEventKeys;
     }
   }, {
     key: 'getEventDetails',
     value: function getEventDetails(event) {
-      console.log(event);
+      this.setState({ eventDetailKey: event });
     }
   }, {
     key: 'render',
@@ -28688,7 +28691,6 @@ var EventList = function (_React$Component) {
           'hello'
         );
       } else {
-        // console.log(this.state)
         var size = data.events.length;
         var eventLib = this.state.eventKeys;
         var eventScores = this.state.eventScores;
@@ -28709,24 +28711,34 @@ var EventList = function (_React$Component) {
               { id: 'events', className: 'horizontal-list' },
               filteredEvents.map(function (event) {
                 return _react2.default.createElement(
-                  'li',
-                  { className: 'list-items', key: event + '+' + (0, _id_generator.uniqueId)() },
+                  'div',
+                  null,
                   _react2.default.createElement(
-                    'p',
-                    null,
-                    event
-                  ),
-                  _react2.default.createElement(
-                    'a',
-                    { onClick: function onClick() {
-                        return _this3.getEventDetails(event);
-                      } },
-                    _react2.default.createElement('img', { src: eventLib[event], alt: '' })
+                    'li',
+                    { className: 'list-items', key: event + '+' + (0, _id_generator.uniqueId)() },
+                    _react2.default.createElement(
+                      'p',
+                      null,
+                      event
+                    ),
+                    _react2.default.createElement(
+                      'a',
+                      { onClick: function onClick() {
+                          return _this3.getEventDetails(event);
+                        } },
+                      _react2.default.createElement('img', { src: eventLib[event], alt: '' })
+                    )
                   )
                 );
               })
             ),
-            _react2.default.createElement('ul', { id: 'event-details' })
+            _react2.default.createElement(_event_detail2.default, {
+              allEvents: this.state.events.events,
+              eventName: this.state.eventDetailKey,
+              eventLib: eventLib,
+              eventScores: eventScores,
+              eventKeys: eventKeys
+            })
           )
         );
       }
@@ -29002,6 +29014,158 @@ var WeakMap = getNative(root, 'WeakMap');
 
 module.exports = WeakMap;
 
+
+/***/ }),
+/* 346 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(13);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _id_generator = __webpack_require__(334);
+
+var _merge = __webpack_require__(111);
+
+var _merge2 = _interopRequireDefault(_merge);
+
+var _isEmpty = __webpack_require__(338);
+
+var _isEmpty2 = _interopRequireDefault(_isEmpty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EventDetail = function (_React$Component) {
+  _inherits(EventDetail, _React$Component);
+
+  function EventDetail(props) {
+    _classCallCheck(this, EventDetail);
+
+    var _this = _possibleConstructorReturn(this, (EventDetail.__proto__ || Object.getPrototypeOf(EventDetail)).call(this, props));
+
+    _this.state = {
+      events: [],
+      eventKeys: [],
+      eventScores: {},
+      eventLib: {},
+      eventName: ""
+
+    };
+    return _this;
+  }
+
+  _createClass(EventDetail, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      // console.log(this.props)
+      this.setState({
+        events: this.props.allEvents,
+        eventKeys: this.props.eventKeys,
+        eventScores: this.props.eventScores,
+        eventLib: this.props.eventLib
+      });
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(nextProps, nextState) {
+      this.state.eventName = nextProps.eventName;
+    }
+  }, {
+    key: 'sortByTimestamp',
+    value: function sortByTimestamp(filteredEvents) {
+      var sortedEvents = filteredEvents.sort(function (a, b) {
+        return a.timestamp - b.timestamp;
+      });
+
+      return sortedEvents;
+    }
+  }, {
+    key: 'destructEvents',
+    value: function destructEvents(filteredEvents) {
+      var sortedEvents = this.sortByTimestamp(filteredEvents);
+
+      return sortedEvents.map(function (event) {
+        var date = new Date(event.timestamp);
+        var parsedDate = date.getFullYear() + ' / ' + (date.getMonth() + 1) + ' / ' + date.getDate() + ', ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+
+        return _react2.default.createElement(
+          'li',
+          null,
+          _react2.default.createElement('img', { src: event.imageSource, alt: '' }),
+          _react2.default.createElement(
+            'p',
+            null,
+            event.videoStream
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            parsedDate
+          ),
+          _react2.default.createElement(
+            'p',
+            null,
+            event.predictions.map(function (el) {
+              var scores = el.scores;
+              return scores.map(function (score) {
+                return _react2.default.createElement(
+                  'span',
+                  null,
+                  score.label,
+                  ', ',
+                  score.score,
+                  '%',
+                  _react2.default.createElement('br', null)
+                );
+              });
+            })
+          )
+        );
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var currEvent = this.state.eventName;
+      var allEvents = this.state.events;
+
+      var filteredEvents = allEvents.filter(function (event) {
+        return event.videoStream == currEvent;
+      });
+
+      console.log(filteredEvents);
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'ul',
+          null,
+          this.destructEvents(filteredEvents)
+        )
+      );
+    }
+  }]);
+
+  return EventDetail;
+}(_react2.default.Component);
+
+exports.default = EventDetail;
 
 /***/ })
 /******/ ]);
