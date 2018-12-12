@@ -140,32 +140,43 @@ class EventList extends React.Component {
       return (
         <div>
           {/*SEARCH BAR */}
-          <input type="text" id="searchField" className="" onChange={this.update.bind(this)} defaultValue={this.state.search} placeholder="Search an event" />
+          <section className="section-wrapper"> 
+            <div>
+              <h4 id="controls-title" className='fit-content'>Detector Gallery</h4>
+              <p id="controls-description" className='fit-content'>Browse, discover, and use high quality detectors created by the Matroid community.</p>
+            </div>
+            <input type="text" id="searchField" className="" onChange={this.update.bind(this)} defaultValue={this.state.search} placeholder="Search for detectors by detector information" />
+          </section>
 
           {/* EVENT INDEX */}
-          <div id="eventIndex" className="event-container">
-            <ul id="events" className="horizontal-list ">
-              {
-                filteredEvents.map(event => {
-                  return(
-                    <div className="list-items grid-item no-margin" >
-                      <li className="" key={`${event}+${uniqueId()}`}>
-                        {/* <p>{event}</p> */}
-                        <a onClick={() => this.getEventDetails(event)}><img src={eventLib[event]} alt="" /></a>
-                      </li>
-                    </div>
-                  )
-                })
-              }
-            </ul>
-              <EventDetail
-                allEvents={this.state.events.events}
-                eventName={this.state.eventDetailKey}
-                eventLib={eventLib} 
-                eventScores={eventScores} 
-                eventKeys={eventKeys}
-              />
-          </div>
+          <section className="section-wrapper">
+            <div id="eventIndex" className="event-container">
+              <ul id="events" className="horizontal-list ">
+                {
+                  filteredEvents.map(event => {
+                    return(
+                      <div className="list-items grid-item no-margin" style={{ backgroundImage: `url(${eventLib[event]})`, backgroundSize: "100% 100%" }}  >
+                        <li id="event-name-tag" className="" key={`${event}+${uniqueId()}`}>
+                          <a onClick={() => this.getEventDetails(event)}>
+                            <p >{event}
+                              {/* <img src={eventLib[event]} className="event-image" alt={event} />                           */}
+                            </p>
+                          </a>
+                        </li>
+                      </div>
+                    )
+                  })
+                }
+              </ul>
+                <EventDetail
+                  allEvents={this.state.events.events}
+                  eventName={this.state.eventDetailKey}
+                  eventLib={eventLib} 
+                  eventScores={eventScores} 
+                  eventKeys={eventKeys}
+                />
+            </div>
+          </section>
         </div>
       );
     }

@@ -28707,38 +28707,64 @@ var EventList = function (_React$Component) {
         return _react2.default.createElement(
           'div',
           null,
-          _react2.default.createElement('input', { type: 'text', id: 'searchField', className: '', onChange: this.update.bind(this), defaultValue: this.state.search, placeholder: 'Search an event' }),
           _react2.default.createElement(
-            'div',
-            { id: 'eventIndex', className: 'event-container' },
+            'section',
+            { className: 'section-wrapper' },
             _react2.default.createElement(
-              'ul',
-              { id: 'events', className: 'horizontal-list ' },
-              filteredEvents.map(function (event) {
-                return _react2.default.createElement(
-                  'div',
-                  { className: 'list-items grid-item no-margin' },
-                  _react2.default.createElement(
-                    'li',
-                    { className: '', key: event + '+' + (0, _id_generator.uniqueId)() },
-                    _react2.default.createElement(
-                      'a',
-                      { onClick: function onClick() {
-                          return _this3.getEventDetails(event);
-                        } },
-                      _react2.default.createElement('img', { src: eventLib[event], alt: '' })
-                    )
-                  )
-                );
-              })
+              'div',
+              null,
+              _react2.default.createElement(
+                'h4',
+                { id: 'controls-title', className: 'fit-content' },
+                'Detector Gallery'
+              ),
+              _react2.default.createElement(
+                'p',
+                { id: 'controls-description', className: 'fit-content' },
+                'Browse, discover, and use high quality detectors created by the Matroid community.'
+              )
             ),
-            _react2.default.createElement(_event_detail2.default, {
-              allEvents: this.state.events.events,
-              eventName: this.state.eventDetailKey,
-              eventLib: eventLib,
-              eventScores: eventScores,
-              eventKeys: eventKeys
-            })
+            _react2.default.createElement('input', { type: 'text', id: 'searchField', className: '', onChange: this.update.bind(this), defaultValue: this.state.search, placeholder: 'Search for detectors by detector information' })
+          ),
+          _react2.default.createElement(
+            'section',
+            { className: 'section-wrapper' },
+            _react2.default.createElement(
+              'div',
+              { id: 'eventIndex', className: 'event-container' },
+              _react2.default.createElement(
+                'ul',
+                { id: 'events', className: 'horizontal-list ' },
+                filteredEvents.map(function (event) {
+                  return _react2.default.createElement(
+                    'div',
+                    { className: 'list-items grid-item no-margin', style: { backgroundImage: 'url(' + eventLib[event] + ')', backgroundSize: "100% 100%" } },
+                    _react2.default.createElement(
+                      'li',
+                      { id: 'event-name-tag', className: '', key: event + '+' + (0, _id_generator.uniqueId)() },
+                      _react2.default.createElement(
+                        'a',
+                        { onClick: function onClick() {
+                            return _this3.getEventDetails(event);
+                          } },
+                        _react2.default.createElement(
+                          'p',
+                          null,
+                          event
+                        )
+                      )
+                    )
+                  );
+                })
+              ),
+              _react2.default.createElement(_event_detail2.default, {
+                allEvents: this.state.events.events,
+                eventName: this.state.eventDetailKey,
+                eventLib: eventLib,
+                eventScores: eventScores,
+                eventKeys: eventKeys
+              })
+            )
           )
         );
       }
