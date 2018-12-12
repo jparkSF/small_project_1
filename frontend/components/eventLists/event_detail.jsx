@@ -49,7 +49,7 @@ class EventDetail extends React.Component {
         let parsedDate = `${date.getFullYear()} / ${date.getMonth() + 1} / ${date.getDate()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
         
         return(
-          <li>
+          <li className="grid-item">
             <img src={event.imageSource} alt=""/>
             <p>{event.videoStream}</p>
             <p>{parsedDate}</p>
@@ -92,10 +92,20 @@ class EventDetail extends React.Component {
 
     return (
       <div>
-        <ul>
-          {this.destructEvents(filteredEvents)}
-        </ul>
-        
+       
+        <div className="grid-wrapper">
+          <ul className="grid-container">
+            {this.destructEvents(filteredEvents)}
+          </ul>
+
+          
+          
+        </div>
+        {/* <div >
+          <button className="btn" id="prevButton">Prev</button>
+          <button className="btn" id="nextButton">Next</button>
+
+        </div> */}
       </div>
     )
   }

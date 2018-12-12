@@ -140,17 +140,17 @@ class EventList extends React.Component {
       return (
         <div>
           {/*SEARCH BAR */}
-          <input type="text" onChange={this.update.bind(this)} defaultValue={this.state.search} placeholder="Search an event" />
+          <input type="text" id="searchField" className="" onChange={this.update.bind(this)} defaultValue={this.state.search} placeholder="Search an event" />
 
           {/* EVENT INDEX */}
-          <div id="eventIndex">
-            <ul id="events" className="horizontal-list">
+          <div id="eventIndex" className="event-container">
+            <ul id="events" className="horizontal-list ">
               {
                 filteredEvents.map(event => {
                   return(
-                    <div>
-                      <li className="list-items" key={`${event}+${uniqueId()}`}>
-                        <p>{event}</p>
+                    <div className="list-items grid-item no-margin" >
+                      <li className="" key={`${event}+${uniqueId()}`}>
+                        {/* <p>{event}</p> */}
                         <a onClick={() => this.getEventDetails(event)}><img src={eventLib[event]} alt="" /></a>
                       </li>
                     </div>
@@ -158,13 +158,13 @@ class EventList extends React.Component {
                 })
               }
             </ul>
-            <EventDetail
-              allEvents={this.state.events.events}
-              eventName={this.state.eventDetailKey}
-              eventLib={eventLib} 
-              eventScores={eventScores} 
-              eventKeys={eventKeys}
-            />
+              <EventDetail
+                allEvents={this.state.events.events}
+                eventName={this.state.eventDetailKey}
+                eventLib={eventLib} 
+                eventScores={eventScores} 
+                eventKeys={eventKeys}
+              />
           </div>
         </div>
       );

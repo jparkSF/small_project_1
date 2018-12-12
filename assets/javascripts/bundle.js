@@ -28464,12 +28464,17 @@ var _event_list_container = __webpack_require__(332);
 
 var _event_list_container2 = _interopRequireDefault(_event_list_container);
 
+var _nav = __webpack_require__(348);
+
+var _nav2 = _interopRequireDefault(_nav);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var header = function header() {
   return _react2.default.createElement(
-    "div",
+    'div',
     null,
+    _react2.default.createElement(_nav2.default, null),
     _react2.default.createElement(_event_list_container2.default, null)
   );
 };
@@ -28702,25 +28707,20 @@ var EventList = function (_React$Component) {
         return _react2.default.createElement(
           'div',
           null,
-          _react2.default.createElement('input', { type: 'text', onChange: this.update.bind(this), defaultValue: this.state.search, placeholder: 'Search an event' }),
+          _react2.default.createElement('input', { type: 'text', id: 'searchField', className: '', onChange: this.update.bind(this), defaultValue: this.state.search, placeholder: 'Search an event' }),
           _react2.default.createElement(
             'div',
-            { id: 'eventIndex' },
+            { id: 'eventIndex', className: 'event-container' },
             _react2.default.createElement(
               'ul',
-              { id: 'events', className: 'horizontal-list' },
+              { id: 'events', className: 'horizontal-list ' },
               filteredEvents.map(function (event) {
                 return _react2.default.createElement(
                   'div',
-                  null,
+                  { className: 'list-items grid-item no-margin' },
                   _react2.default.createElement(
                     'li',
-                    { className: 'list-items', key: event + '+' + (0, _id_generator.uniqueId)() },
-                    _react2.default.createElement(
-                      'p',
-                      null,
-                      event
-                    ),
+                    { className: '', key: event + '+' + (0, _id_generator.uniqueId)() },
                     _react2.default.createElement(
                       'a',
                       { onClick: function onClick() {
@@ -29105,7 +29105,7 @@ var EventDetail = function (_React$Component) {
 
         return _react2.default.createElement(
           'li',
-          null,
+          { className: 'grid-item' },
           _react2.default.createElement('img', { src: event.imageSource, alt: '' }),
           _react2.default.createElement(
             'p',
@@ -29154,9 +29154,13 @@ var EventDetail = function (_React$Component) {
         'div',
         null,
         _react2.default.createElement(
-          'ul',
-          null,
-          this.destructEvents(filteredEvents)
+          'div',
+          { className: 'grid-wrapper' },
+          _react2.default.createElement(
+            'ul',
+            { className: 'grid-container' },
+            this.destructEvents(filteredEvents)
+          )
         )
       );
     }
@@ -29166,6 +29170,66 @@ var EventDetail = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = EventDetail;
+
+/***/ }),
+/* 347 */,
+/* 348 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(13);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _merge = __webpack_require__(111);
+
+var _merge2 = _interopRequireDefault(_merge);
+
+var _isEmpty = __webpack_require__(338);
+
+var _isEmpty2 = _interopRequireDefault(_isEmpty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NavBar = function (_React$Component) {
+  _inherits(NavBar, _React$Component);
+
+  function NavBar(props) {
+    _classCallCheck(this, NavBar);
+
+    return _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).call(this, props));
+  }
+
+  _createClass(NavBar, [{
+    key: 'render',
+    value: function render() {
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'nav' },
+        _react2.default.createElement('img', { src: 'assets/images/logo/blue-background-logo.png', alt: '' })
+      );
+    }
+  }]);
+
+  return NavBar;
+}(_react2.default.Component);
+
+exports.default = NavBar;
 
 /***/ })
 /******/ ]);
