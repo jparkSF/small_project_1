@@ -37,6 +37,7 @@
     "chart.js": "^2.7.3",
     "hover.css": "^2.2.1",
     "infinite-scroll": "^3.0.2",
+    "livereload": "^0.7.0",
     "lodash": "^4.17.11",
     "moment": "^2.19.3",
     "moment-transform": "^1.0.1",
