@@ -118,6 +118,7 @@ class EventList extends React.Component {
   }
 
   getEventDetails(event){
+    
     this.setState({eventDetailKey: event})
   }
 
@@ -150,31 +151,33 @@ class EventList extends React.Component {
 
           {/* EVENT INDEX */}
           <section className="section-wrapper">
+            <div className="carousel-title">Featured Events</div>
             <div id="eventIndex" className="event-container">
               <ul id="events" className="horizontal-list ">
                 {
                   filteredEvents.map(event => {
                     return(
-                      <div className="list-items grid-item no-margin" style={{ backgroundImage: `url(${eventLib[event]})`, backgroundSize: "100% 100%" }}  >
-                        <li id="event-name-tag" className="" key={`${event}+${uniqueId()}`}>
-                          <a onClick={() => this.getEventDetails(event)}>
-                            <p >{event}
-                              {/* <img src={eventLib[event]} className="event-image" alt={event} />                           */}
-                            </p>
-                          </a>
-                        </li>
-                      </div>
+                      <a id="event-name-tag" className="list-items grid-item no-margin" onClick={() => this.getEventDetails(event)}>
+                        <div style={{ backgroundImage: `url(${eventLib[event]})`, backgroundSize: "100% 100%" }}>
+                          <li className="" key={`${event}+${uniqueId()}`}>  
+                            <p>{event}</p>
+                          </li>
+                        </div>
+                      </a>
                     )
                   })
                 }
               </ul>
-                <EventDetail
-                  allEvents={this.state.events.events}
-                  eventName={this.state.eventDetailKey}
-                  eventLib={eventLib} 
-                  eventScores={eventScores} 
-                  eventKeys={eventKeys}
-                />
+             
+            </div>
+            <div>
+              <EventDetail
+                allEvents={this.state.events.events}
+                eventName={this.state.eventDetailKey}
+                eventLib={eventLib}
+                eventScores={eventScores}
+                eventKeys={eventKeys}
+              />
             </div>
           </section>
         </div>

@@ -14,18 +14,6 @@ ul{
 }
 
 
-#searchField{
-  padding-left:20px;
-  border-radius:5px;
-  border:1px solid #ccc;
-  margin: 25px auto 10px auto;
-      
-}
-
-#searchField::placeholder {
-  
-}
-
 .nav{
   background: #4364a3;
   height: 40px;
@@ -38,6 +26,20 @@ ul{
   
 }
 
+#searchField{
+  padding-left:20px;
+  border-radius:5px;
+  border:1px solid #ccc;
+  margin: 25px auto 10px auto;      
+}
+
+.carousel-title{
+  margin: 15px 0 0 100px;
+  font-size: 24px;
+  font-weight: 300;
+  color: #3399c7;
+}
+
 .horizontal-list{
   max-width: 800px;
   margin:auto;
@@ -46,9 +48,7 @@ ul{
 }
 .list-items{
   height:200px;
-  opacity:0.8;
-  /* border: 1px dotted green; */
-  
+  opacity:0.7;
 }
 
 .list-items:hover {   
@@ -56,18 +56,28 @@ ul{
 }
 
 #event-name-tag{
- display: inline-block;
-    color: white;
-    background: rgba(0,0,0,0.7);
-    margin-top: 140px;
-    text-align: center;
-    padding: 1px 8px;
-    font-weight: 500;
+  max-width: 266px;
+  color: white;
+  text-align: center;
+  padding: 0;
+  margin:0;
+  font-weight: 500;
 }
 
-#event-name-tag > a > p {
+#event-name-tag > div{
+  height: 100%;
   padding:0;
   margin:0;
+}
+
+#event-name-tag > div > li{
+  padding-top:140px;
+  display: -webkit-inline-box;
+}
+#event-name-tag > div > li > p{
+  padding: 3px 7px;
+  background: rgba(0,0,0,0.7)
+  
 }
 
 .grid-item {
@@ -117,6 +127,7 @@ input[type="text"] {
   grid-template-columns: auto auto auto;
   padding: 10px;
 }
+
 .grid-container {
   display: grid;
   grid-template-columns: auto auto auto auto;

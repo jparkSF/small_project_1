@@ -28680,6 +28680,7 @@ var EventList = function (_React$Component) {
   }, {
     key: 'getEventDetails',
     value: function getEventDetails(event) {
+
       this.setState({ eventDetailKey: event });
     }
   }, {
@@ -28731,22 +28732,27 @@ var EventList = function (_React$Component) {
             { className: 'section-wrapper' },
             _react2.default.createElement(
               'div',
+              { className: 'carousel-title' },
+              'Featured Events'
+            ),
+            _react2.default.createElement(
+              'div',
               { id: 'eventIndex', className: 'event-container' },
               _react2.default.createElement(
                 'ul',
                 { id: 'events', className: 'horizontal-list ' },
                 filteredEvents.map(function (event) {
                   return _react2.default.createElement(
-                    'div',
-                    { className: 'list-items grid-item no-margin', style: { backgroundImage: 'url(' + eventLib[event] + ')', backgroundSize: "100% 100%" } },
+                    'a',
+                    { id: 'event-name-tag', className: 'list-items grid-item no-margin', onClick: function onClick() {
+                        return _this3.getEventDetails(event);
+                      } },
                     _react2.default.createElement(
-                      'li',
-                      { id: 'event-name-tag', className: '', key: event + '+' + (0, _id_generator.uniqueId)() },
+                      'div',
+                      { style: { backgroundImage: 'url(' + eventLib[event] + ')', backgroundSize: "100% 100%" } },
                       _react2.default.createElement(
-                        'a',
-                        { onClick: function onClick() {
-                            return _this3.getEventDetails(event);
-                          } },
+                        'li',
+                        { className: '', key: event + '+' + (0, _id_generator.uniqueId)() },
                         _react2.default.createElement(
                           'p',
                           null,
@@ -28756,7 +28762,11 @@ var EventList = function (_React$Component) {
                     )
                   );
                 })
-              ),
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
               _react2.default.createElement(_event_detail2.default, {
                 allEvents: this.state.events.events,
                 eventName: this.state.eventDetailKey,
@@ -29090,7 +29100,6 @@ var EventDetail = function (_React$Component) {
       eventScores: {},
       eventLib: {},
       eventName: ""
-
     };
     return _this;
   }
@@ -29174,11 +29183,14 @@ var EventDetail = function (_React$Component) {
         return event.videoStream == currEvent;
       });
 
-      console.log(filteredEvents);
-
       return _react2.default.createElement(
         'div',
         null,
+        currEvent ? _react2.default.createElement(
+          'div',
+          { className: 'carousel-title' },
+          'Search Results...'
+        ) : null,
         _react2.default.createElement(
           'div',
           { className: 'grid-wrapper' },

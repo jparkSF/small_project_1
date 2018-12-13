@@ -13,7 +13,6 @@ class EventDetail extends React.Component {
       eventScores: {},
       eventLib: {},
       eventName: ""
-
     }
   }
 
@@ -71,12 +70,7 @@ class EventDetail extends React.Component {
         )
       })
     )
-
   }
-
-
-
-
 
   render() {
     let currEvent = this.state.eventName
@@ -88,24 +82,14 @@ class EventDetail extends React.Component {
       }
     )
 
-    console.log(filteredEvents)
-
     return (
       <div>
-       
+        {currEvent ? <div className="carousel-title">Search Results...</div> : null}
         <div className="grid-wrapper">
           <ul className="grid-container">
             {this.destructEvents(filteredEvents)}
-          </ul>
-
-          
-          
+          </ul>  
         </div>
-        {/* <div >
-          <button className="btn" id="prevButton">Prev</button>
-          <button className="btn" id="nextButton">Next</button>
-
-        </div> */}
       </div>
     )
   }
