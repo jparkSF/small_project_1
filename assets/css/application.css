@@ -171,17 +171,11 @@ input[type="text"] {
   margin-right:20px;
   
 }
- 
-
-
 .fit-content{
   width: fit-content;
   margin: auto;
 }
-
-
-.no-margin{
-  
+.no-margin{ 
   margin:0;
 }
 

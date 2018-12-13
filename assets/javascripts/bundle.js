@@ -28704,7 +28704,7 @@ var EventList = function (_React$Component) {
 
         var filteredLabels = this.filterEventsBySearch();
         var filteredEvents = this.makeUniqueEvents(filteredLabels);
-
+        console.log(eventScores);
         return _react2.default.createElement(
           'div',
           null,

@@ -137,7 +137,7 @@ class EventList extends React.Component {
       
       let filteredLabels = this.filterEventsBySearch()
       let filteredEvents = this.makeUniqueEvents(filteredLabels)
-      
+      console.log(eventScores)
       return (
         <div>
           {/*SEARCH BAR */}
