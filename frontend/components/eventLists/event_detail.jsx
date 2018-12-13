@@ -72,6 +72,32 @@ class EventDetail extends React.Component {
     )
   }
 
+  injectTags(currEvent, eventCount){
+    if(currEvent){
+      return (
+        <div className="">
+          <div className="carousel-title ">Search Results...</div>
+          <hr className="result"/>
+          <div className="result result-key-container">
+            <div className="result-key p-wrapper">
+              <span className="dot dot-red"></span><p>Not a match</p>
+              <span className="dot dot-yellow"></span><p>Poor</p>
+              <span className="dot dot-blue"></span><p>Fair</p>
+              <span className="dot dot-green"></span><p>Good match</p>
+            </div>
+            <div className="result-classified p-wrapper">
+              <p>
+                <b>{eventCount}</b> classified images
+              </p>
+            </div>
+          </div>
+          <hr className="result"/>
+        </div>
+      )
+    }
+    
+  }
+
   render() {
     let currEvent = this.state.eventName
     let allEvents = this.state.events
@@ -84,7 +110,7 @@ class EventDetail extends React.Component {
 
     return (
       <div>
-        {currEvent ? <div className="carousel-title">Search Results...</div> : null}
+        {this.injectTags(currEvent, filteredEvents.length)}
         <div className="grid-wrapper">
           <ul className="grid-container">
             {this.destructEvents(filteredEvents)}

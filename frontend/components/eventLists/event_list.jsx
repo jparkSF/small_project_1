@@ -170,7 +170,7 @@ class EventList extends React.Component {
               </ul>
              
             </div>
-            <div>
+            <div className="lower-content">
               <EventDetail
                 allEvents={this.state.events.events}
                 eventName={this.state.eventDetailKey}

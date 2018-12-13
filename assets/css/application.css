@@ -34,7 +34,7 @@ ul{
 }
 
 .carousel-title{
-  margin: 15px 0 0 100px;
+  margin: 15px 0 15px 100px;
   font-size: 24px;
   font-weight: 300;
   color: #3399c7;
@@ -81,10 +81,10 @@ ul{
 }
 
 .grid-item {
-  margin: 15px;
+  /* margin: 15px; */
   width: 100%;
   /* background-color: rgba(255, 255, 255, 0.8); */
-  /* border: 1px solid rgba(0, 0, 0, 0.8); */
+  border: 1px dotted blue;
   text-align: center;
 }
 
@@ -118,21 +118,61 @@ input[type="text"] {
 }
 
 .grid-wrapper {
-  width: 700px;
+  width: 900px;
   margin:auto;
 }
 
 .event-container{
   width: 100%;
   grid-template-columns: auto auto auto;
-  padding: 10px;
+  padding: 0 10px;
 }
 
 .grid-container {
   display: grid;
+  margin-top:20px;
   grid-template-columns: auto auto auto auto;
   padding: 10px;
+  border: 1px dotted red
 }
+
+.lower-content{
+  margin-top:30px;
+}
+
+.result{
+  width:900px;
+  margin: auto !important;
+}
+
+.result-key-container{
+  
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.result-key{
+  display: flex;
+}
+ 
+.p-wrapper > p{
+  margin: 10px 0 10px 0;
+  font-size: 14px;
+
+  
+} 
+
+.result-key > p {
+  font-weight: bold;
+  color: #333;
+  /* font-size: 14px; */
+  line-height: 1.42857;
+  margin-right:20px;
+  
+}
+ 
+
 
 .fit-content{
   width: fit-content;
@@ -143,4 +183,31 @@ input[type="text"] {
 .no-margin{
   
   margin:0;
+}
+
+
+
+/*
+    COLOR DOTS FOR RESULT KEY
+*/
+.dot{
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: auto 7px 16px auto;
+  
+}
+
+.dot-red {
+  background-color: #f22a1d;
+}
+.dot-yellow {
+  background-color: #eda73b;
+}
+.dot-blue {
+  background-color: #39aade;
+}
+.dot-green {
+  background-color: #28b94c;
 }

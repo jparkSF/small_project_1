@@ -24098,7 +24098,7 @@ var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var middleWares = [_thunk2.default, _reduxLogger2.default];
+var middleWares = [_thunk2.default];
 var configureStore = (0, _redux.createStore)(_root_reducer2.default, _redux.applyMiddleware.apply(undefined, middleWares));
 
 exports.default = configureStore;
@@ -28766,7 +28766,7 @@ var EventList = function (_React$Component) {
             ),
             _react2.default.createElement(
               'div',
-              null,
+              { className: 'lower-content' },
               _react2.default.createElement(_event_detail2.default, {
                 allEvents: this.state.events.events,
                 eventName: this.state.eventDetailKey,
@@ -29174,6 +29174,69 @@ var EventDetail = function (_React$Component) {
       });
     }
   }, {
+    key: 'injectTags',
+    value: function injectTags(currEvent, eventCount) {
+      if (currEvent) {
+        return _react2.default.createElement(
+          'div',
+          { className: '' },
+          _react2.default.createElement(
+            'div',
+            { className: 'carousel-title ' },
+            'Search Results...'
+          ),
+          _react2.default.createElement('hr', { className: 'result' }),
+          _react2.default.createElement(
+            'div',
+            { className: 'result result-key-container' },
+            _react2.default.createElement(
+              'div',
+              { className: 'result-key p-wrapper' },
+              _react2.default.createElement('span', { className: 'dot dot-red' }),
+              _react2.default.createElement(
+                'p',
+                null,
+                'Not a match'
+              ),
+              _react2.default.createElement('span', { className: 'dot dot-yellow' }),
+              _react2.default.createElement(
+                'p',
+                null,
+                'Poor'
+              ),
+              _react2.default.createElement('span', { className: 'dot dot-blue' }),
+              _react2.default.createElement(
+                'p',
+                null,
+                'Fair'
+              ),
+              _react2.default.createElement('span', { className: 'dot dot-green' }),
+              _react2.default.createElement(
+                'p',
+                null,
+                'Good match'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'result-classified p-wrapper' },
+              _react2.default.createElement(
+                'p',
+                null,
+                _react2.default.createElement(
+                  'b',
+                  null,
+                  eventCount
+                ),
+                ' classified images'
+              )
+            )
+          ),
+          _react2.default.createElement('hr', { className: 'result' })
+        );
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var currEvent = this.state.eventName;
@@ -29186,11 +29249,7 @@ var EventDetail = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        currEvent ? _react2.default.createElement(
-          'div',
-          { className: 'carousel-title' },
-          'Search Results...'
-        ) : null,
+        this.injectTags(currEvent, filteredEvents.length),
         _react2.default.createElement(
           'div',
           { className: 'grid-wrapper' },
