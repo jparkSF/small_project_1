@@ -17,6 +17,10 @@ class EventDetail extends React.Component {
     }
   }
 
+  componentWillMount() {
+    $('grid-wrapper').empty();
+  }
+
   componentDidMount(){
     // console.log(this.props)
     this.setState({

@@ -16,6 +16,7 @@ class EventList extends React.Component {
 
   }
 
+  
   componentDidMount() {
     let events = this.props.fetchData()
     let chopped = events.data.data.mockResponse
@@ -151,8 +152,9 @@ class EventList extends React.Component {
 
           {/* EVENT INDEX */}
           <section className="section-wrapper">
-            <div className="carousel-title">Featured Events</div>
+            
             <div id="eventIndex" className="event-container">
+              <div className="carousel-title">Featured Events</div>
               <ul id="events" className="horizontal-list ">
                 {
                   filteredEvents.map(event => {

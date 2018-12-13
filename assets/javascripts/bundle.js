@@ -28830,12 +28830,12 @@ var EventList = function (_React$Component) {
             { className: 'section-wrapper' },
             _react2.default.createElement(
               'div',
-              { className: 'carousel-title' },
-              'Featured Events'
-            ),
-            _react2.default.createElement(
-              'div',
               { id: 'eventIndex', className: 'event-container' },
+              _react2.default.createElement(
+                'div',
+                { className: 'carousel-title' },
+                'Featured Events'
+              ),
               _react2.default.createElement(
                 'ul',
                 { id: 'events', className: 'horizontal-list ' },
@@ -29106,6 +29106,11 @@ var EventDetail = function (_React$Component) {
   }
 
   _createClass(EventDetail, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      $('grid-wrapper').empty();
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       // console.log(this.props)
@@ -29336,7 +29341,12 @@ var PredictionTile = function (_React$Component) {
   function PredictionTile(props) {
     _classCallCheck(this, PredictionTile);
 
-    return _possibleConstructorReturn(this, (PredictionTile.__proto__ || Object.getPrototypeOf(PredictionTile)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (PredictionTile.__proto__ || Object.getPrototypeOf(PredictionTile)).call(this, props));
+
+    _this.state = {
+      currDetectionId: 0
+    };
+    return _this;
   }
 
   _createClass(PredictionTile, [{
@@ -29393,43 +29403,110 @@ var PredictionTile = function (_React$Component) {
       return sortedEvents;
     }
   }, {
+    key: 'handleClick',
+    value: function handleClick(str, detectionLength) {
+      var currDetectionId = this.state.currDetectionId;
+
+      switch (str) {
+        case 'left':
+          if (currDetectionId === 0) {
+            currDetectionId = detectionLength - 1;
+            this.setState({ currDetectionId: currDetectionId });
+          } else {
+            currDetectionId--;
+            this.setState({ currDetectionId: currDetectionId });
+          }
+          break;
+
+        case 'right':
+          if (currDetectionId + 1 === detectionLength) {
+            currDetectionId = 0;
+            this.setState({ currDetectionId: currDetectionId });
+          } else {
+            currDetectionId++;
+            this.setState({ currDetectionId: currDetectionId });
+          }
+          break;
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var event = this.props.event;
-      console.log(event);
+      var detectionLength = event.predictions.length;
+      var currDetectionId = this.state.currDetectionId;
+      var detection = event.predictions[currDetectionId];
+
       if (!event) {
         return null;
       } else {
         var date = new Date(event.timestamp);
-        var parsedDate = date.getFullYear() + ' / ' + (date.getMonth() + 1) + ' / ' + date.getDate() + ', ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        var parsedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ', ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
         return _react2.default.createElement(
           'li',
           { className: 'grid-item prediction-tile' },
+          _react2.default.createElement('img', { src: event.imageSource, alt: '' }),
           _react2.default.createElement(
+            'p',
+            { id: 'timestamp' },
+            parsedDate
+          ),
+          detectionLength == 1 ? null : _react2.default.createElement(
             'div',
-            { id: 'tile-thumbnail', style: { backgroundImage: 'url(' + event.imageSource + ')' } },
+            null,
             _react2.default.createElement(
               'p',
-              null,
-              parsedDate
+              { id: 'detection' },
+              'Detection ',
+              currDetectionId + 1,
+              '/',
+              detectionLength
+            ),
+            _react2.default.createElement(
+              'button',
+              { onClick: function onClick() {
+                  return _this2.handleClick('left', detectionLength);
+                } },
+              'left'
+            ),
+            _react2.default.createElement(
+              'button',
+              { onClick: function onClick() {
+                  return _this2.handleClick('right', detectionLength);
+                } },
+              'right'
             )
           ),
           _react2.default.createElement(
-            'p',
-            null,
-            event.predictions.map(function (el) {
-              var scores = el.scores;
-              return scores.map(function (score) {
-                return _react2.default.createElement(
-                  'span',
+            'div',
+            { id: 'detection-scores' },
+            detection.scores.map(function (score) {
+              return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                  'p',
                   null,
-                  score.label,
-                  ', ',
-                  score.score,
-                  '%',
-                  _react2.default.createElement('br', null)
-                );
-              });
+                  _react2.default.createElement(
+                    'span',
+                    null,
+                    score.label
+                  ),
+                  _react2.default.createElement(
+                    'span',
+                    null,
+                    score.score.toFixed(2),
+                    ' %'
+                  )
+                ),
+                _react2.default.createElement(
+                  'p',
+                  null,
+                  'graph'
+                )
+              );
             })
           )
         );
