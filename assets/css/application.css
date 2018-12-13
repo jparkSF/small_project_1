@@ -205,3 +205,19 @@ input[type="text"] {
 .dot-green {
   background-color: #28b94c;
 }
+
+
+/*
+  EVENT PREDICTION TILE
+*/
+
+.prediction-tile{
+  min-height: 200px;
+  padding: 7px;
+}
+
+#tile-thumbnail{
+  
+  min-height:100px;
+  
+}

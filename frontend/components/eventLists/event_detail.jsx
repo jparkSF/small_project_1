@@ -2,6 +2,7 @@ import React from 'react';
 import { uniqueId } from '../../util/id_generator'
 import merge from 'lodash/merge';
 import isEmpty from 'lodash/isEmpty';
+import EventPredictionTile from './event_prediction';
 
 class EventDetail extends React.Component {
   constructor(props) {
@@ -30,47 +31,6 @@ class EventDetail extends React.Component {
     this.state.eventName = nextProps.eventName
   }
 
-  sortByTimestamp(filteredEvents){
-    let sortedEvents = filteredEvents.sort((a,b) => {
-      return a.timestamp - b.timestamp
-    })
-
-    return sortedEvents
-  }
-
-  destructEvents(filteredEvents){
-    let sortedEvents = this.sortByTimestamp(filteredEvents)
-    
-    
-    return (
-        sortedEvents.map(event => {
-        let date = new Date(event.timestamp)
-        let parsedDate = `${date.getFullYear()} / ${date.getMonth() + 1} / ${date.getDate()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-        
-        return(
-          <li className="grid-item">
-            <img src={event.imageSource} alt=""/>
-            <p>{event.videoStream}</p>
-            <p>{parsedDate}</p>
-            <p>
-              {
-                event.predictions.map(el => {
-                  let scores = el.scores
-                  return (
-                    scores.map(score => {
-                      return (
-                        <span>{score.label}, {score.score}%<br /></span>
-                      )
-                    })
-                  )
-                })
-              }
-            </p>
-          </li>
-        )
-      })
-    )
-  }
 
   injectTags(currEvent, eventCount){
     if(currEvent){
@@ -112,9 +72,7 @@ class EventDetail extends React.Component {
       <div>
         {this.injectTags(currEvent, filteredEvents.length)}
         <div className="grid-wrapper">
-          <ul className="grid-container">
-            {this.destructEvents(filteredEvents)}
-          </ul>  
+          <EventPredictionTile events={filteredEvents}/> 
         </div>
       </div>
     )
