@@ -65,6 +65,26 @@ class PredictionTile extends React.Component {
         }
         break;
     }
+
+    this.resetThumbs()
+  }
+
+  resetThumbs(){
+    console.log(this.state.index)
+    let thumbs = $('.thumbs')
+    let up = thumbs[this.state.index*2]
+    let down = thumbs[(this.state.index * 2) + 1]
+
+    let $up = $(up)
+    let $down = $(down)
+
+    if($up.hasClass('fas')){
+      $up.addClass('far').removeClass('fas')
+    }
+
+    if ($down.hasClass('fas')) {
+      $down.addClass('far').removeClass('fas')
+    }
   }
 
   onMouse(event){
@@ -216,8 +236,8 @@ class PredictionTile extends React.Component {
             <p>is this <b>{inspectionLabel}</b>?</p>
             <p>
               {/* up and down feedback won't be stored in DB, thus it resets every refresh of the page */}
-              <i id="up" className="far fa-thumbs-up text-success" onClick={() => this.changeStatus('up')}></i>
-              <i id="down" className="far fa-thumbs-down text-danger" onClick={() => this.changeStatus('down')}></i>
+              <i id="up" className="far fa-thumbs-up text-success thumbs" onClick={() => this.changeStatus('up')}></i>
+              <i id="down" className="far fa-thumbs-down text-danger thumbs" onClick={() => this.changeStatus('down')}></i>
             </p>
           </div>
         </li>

@@ -29409,6 +29409,27 @@ var PredictionTile = function (_React$Component) {
           }
           break;
       }
+
+      this.resetThumbs();
+    }
+  }, {
+    key: 'resetThumbs',
+    value: function resetThumbs() {
+      console.log(this.state.index);
+      var thumbs = $('.thumbs');
+      var up = thumbs[this.state.index * 2];
+      var down = thumbs[this.state.index * 2 + 1];
+
+      var $up = $(up);
+      var $down = $(down);
+
+      if ($up.hasClass('fas')) {
+        $up.addClass('far').removeClass('fas');
+      }
+
+      if ($down.hasClass('fas')) {
+        $down.addClass('far').removeClass('fas');
+      }
     }
   }, {
     key: 'onMouse',
@@ -29609,10 +29630,10 @@ var PredictionTile = function (_React$Component) {
             _react2.default.createElement(
               'p',
               null,
-              _react2.default.createElement('i', { id: 'up', className: 'far fa-thumbs-up text-success', onClick: function onClick() {
+              _react2.default.createElement('i', { id: 'up', className: 'far fa-thumbs-up text-success thumbs', onClick: function onClick() {
                   return _this2.changeStatus('up');
                 } }),
-              _react2.default.createElement('i', { id: 'down', className: 'far fa-thumbs-down text-danger', onClick: function onClick() {
+              _react2.default.createElement('i', { id: 'down', className: 'far fa-thumbs-down text-danger thumbs', onClick: function onClick() {
                   return _this2.changeStatus('down');
                 } })
             )
