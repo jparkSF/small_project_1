@@ -28741,6 +28741,25 @@ var EventList = function (_React$Component) {
       return this.setState(_defineProperty({}, search, e.currentTarget.value));
     }
   }, {
+    key: 'debounce',
+    value: function debounce(func, wait) {
+      var timeout = void 0;
+
+      return function () {
+        var context = this,
+            args = arguments;
+        var later = function later() {
+          timeout = null;
+
+          func.apply(context, args);
+        };
+
+        var callNow = !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+  }, {
     key: 'filterEventsBySearch',
     value: function filterEventsBySearch() {
       var _this2 = this;

@@ -84,6 +84,23 @@ class EventList extends React.Component {
     )
   }
 
+  debounce(func, wait) {
+    let timeout;
+    
+    return function () {
+      let context = this, args = arguments;
+      let later = function () {
+        timeout = null;
+
+        func.apply(context, args);
+      };
+
+      let callNow = !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
   filterEventsBySearch(){
     let searcKeywords = this.state.search.split(" ")
     const eventKeys = Object.keys(this.state.eventKeys);

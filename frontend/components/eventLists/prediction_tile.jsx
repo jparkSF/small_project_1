@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 class PredictionTile extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       event: {},
       currDetectionId: 0,
@@ -14,18 +14,18 @@ class PredictionTile extends React.Component {
       index: props.tileIndex
     }
   }
-  componentWillMount(){
+  componentWillMount() {
     this.setState({
       event: this.props.event,
       predictions: this.props.event.predictions
     })
   }
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     let event = nextProps.event
     let currDetectionId = 0
     let predictions = nextProps.event.predictions
-    
+
     this.setState({
       event,
       currDetectionId,
@@ -41,12 +41,12 @@ class PredictionTile extends React.Component {
   }
 
 
-  handleClick(str, detectionLength){
+  handleClick(str, detectionLength) {
     let currDetectionId = this.state.currDetectionId;
-   
-    switch(str){
+
+    switch (str) {
       case 'left':
-        if(currDetectionId === 0){
+        if (currDetectionId === 0) {
           currDetectionId = detectionLength - 1
           this.setState({ currDetectionId })
         } else {
@@ -69,16 +69,16 @@ class PredictionTile extends React.Component {
     this.resetThumbs()
   }
 
-  resetThumbs(){
+  resetThumbs() {
     console.log(this.state.index)
     let thumbs = $('.thumbs')
-    let up = thumbs[this.state.index*2]
+    let up = thumbs[this.state.index * 2]
     let down = thumbs[(this.state.index * 2) + 1]
 
     let $up = $(up)
     let $down = $(down)
 
-    if($up.hasClass('fas')){
+    if ($up.hasClass('fas')) {
       $up.addClass('far').removeClass('fas')
     }
 
@@ -87,15 +87,15 @@ class PredictionTile extends React.Component {
     }
   }
 
-  onMouse(event){
+  onMouse(event) {
     let eventType = event.type;
     let bounds = this.state.predictions[this.state.currDetectionId].boundingBox;
-    let tiles = $('.image-overlay-box')  
+    let tiles = $('.image-overlay-box')
     let currentNode = tiles[this.state.index];
     let $currentNode = $(currentNode)
     let imageHeight = $currentNode.height()
     let imageWidth = $currentNode.width()
-    
+
     let svgShadow = `
             <svg class="image-overlay-box-shadow"> 
               <path fill="black" opacity="0.7" fill-rule="evenodd"
@@ -109,8 +109,8 @@ class PredictionTile extends React.Component {
               "/>
             </svg>
              `
-    
-    switch(eventType){
+
+    switch (eventType) {
       case 'mouseover':
         $currentNode.prepend(svgShadow)
         break;
@@ -118,34 +118,34 @@ class PredictionTile extends React.Component {
       case 'mouseout':
         $currentNode.find(':first-child').remove();
         break;
-    }                 
-    
+    }
+
   }
 
-  changeStatus(str){
+  changeStatus(str) {
     let key = str === "up" ? "up" : "down"
-    
+
     let targetNode = $(`i#${key}`)[this.state.index]
     let $targetNode = $(targetNode)
-    
-    switch(key){
+
+    switch (key) {
       case 'up':
-        if($targetNode.hasClass("far")){
+        if ($targetNode.hasClass("far")) {
           $targetNode.addClass("fas").removeClass("far")
-          
+
           // check if down button is already clicked
           let downButton = $('i#down')[this.state.index]
           let $downButton = $(downButton)
 
-          if($downButton.hasClass("fas")){
+          if ($downButton.hasClass("fas")) {
             $downButton.addClass("far").removeClass("fas")
           }
         } else {
           $targetNode.addClass("far").removeClass("fas")
         }
-        
+
         break;
-      
+
       case 'down':
         if ($targetNode.hasClass("far")) {
           $targetNode.addClass("fas").removeClass("far")
@@ -165,15 +165,15 @@ class PredictionTile extends React.Component {
 
   render() {
     let event = this.state.event
-    
-    if(!event){
+
+    if (!event) {
       return (null)
     } else {
       let detectionLength = this.state.predictions.length
       let currDetectionId = this.state.currDetectionId
       let detection = this.state.predictions[currDetectionId]
-      let sortedByScore = detection.scores.sort((a,b) => (b.score - a.score))
-      let date =  new Date(event.timestamp)
+      let sortedByScore = detection.scores.sort((a, b) => (b.score - a.score))
+      let date = new Date(event.timestamp)
       let parsedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
       let bound = detection.boundingBox
       let inspectionLabel = ''
@@ -183,18 +183,18 @@ class PredictionTile extends React.Component {
         width: `calc(100% * ${bound.width}`,
         height: `calc(100% * ${bound.height})`
       }
-      
+
 
       return (
-        <li className="grid-item prediction-tile"> 
+        <li className="grid-item prediction-tile">
           <div className='image-overlay-box'>
-            <img id="eventImage" src={event.imageSource} alt="" />  
+            <img id="eventImage" src={event.imageSource} alt="" />
             <div className='image-overlay-bounding-box' onMouseOver={(e) => this.onMouse(e)} onMouseOut={(e) => this.onMouse(e)} style={boundingArea}>
             </div>
           </div>
           <p id="timestamp">{parsedDate}</p>
           {
-            detectionLength == 1 ? <div></div> : 
+            detectionLength == 1 ? <div></div> :
               <div id="detection">
                 <a onClick={() => this.handleClick('left', detectionLength)}><i className="fas fa-arrow-left"></i></a>
                 <p id="">Detection {currDetectionId + 1}/{detectionLength}</p>
@@ -203,29 +203,29 @@ class PredictionTile extends React.Component {
           }
           <hr />
           <div id="detection-scores">
-            { 
-              sortedByScore.map((score,idx) => {
+            {
+              sortedByScore.map((score, idx) => {
                 let confidence = score.score;
                 let scoreColor = ''
-                if(confidence <= 25){
+                if (confidence <= 25) {
                   scoreColor = 'bg-danger'
-                } else if (confidence <= 50){
+                } else if (confidence <= 50) {
                   scoreColor = 'bg-warning'
-                } else if (confidence <= 75){
+                } else if (confidence <= 75) {
                   scoreColor = 'bg-info'
                 } else {
                   scoreColor = 'bg-success'
                 }
 
                 return (
-                  <div id="score-details" key={idx}> 
+                  <div id="score-details" key={idx}>
                     <p>
                       {inspectionLabel = score.label}
                       <span>{score.label}</span>
                       <span>{(score.score).toFixed(2)} %</span>
                     </p>
                     <div className="progress">
-                      <div className={`progress-bar ${scoreColor}`} role="progressbar" style={{width: `${score.score}%`}} aria-valuenow={score.score} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div className={`progress-bar ${scoreColor}`} role="progressbar" style={{ width: `${score.score}%` }} aria-valuenow={score.score} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                 )
