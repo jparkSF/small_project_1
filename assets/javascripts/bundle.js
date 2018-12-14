@@ -28764,6 +28764,8 @@ var EventList = function (_React$Component) {
       var searcKeywords = this.state.search.split(" ");
       var eventKeys = Object.keys(this.state.eventKeys);
       var labels = Object.keys(this.state.eventScores);
+
+      console.log(eventKeys, labels);
       var filteredLabel = [];
       // console.log(eventKeys)
       if (!(0, _isEmpty2.default)(labels)) {
@@ -29529,7 +29531,7 @@ var PredictionTile = function (_React$Component) {
         var date = new Date(event.timestamp);
         var parsedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ', ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
         var bound = detection.boundingBox;
-        var inspectionLabel = '';
+
         var boundingArea = {
           top: 'calc((100% * ' + bound.top + ') + 2px)',
           left: 'calc((100% * ' + bound.left + ') + 2px)',
@@ -29606,7 +29608,6 @@ var PredictionTile = function (_React$Component) {
                 _react2.default.createElement(
                   'p',
                   null,
-                  inspectionLabel = score.label,
                   _react2.default.createElement(
                     'span',
                     null,
@@ -29637,7 +29638,7 @@ var PredictionTile = function (_React$Component) {
               _react2.default.createElement(
                 'b',
                 null,
-                inspectionLabel
+                sortedByScore[0].label
               ),
               '?'
             ),

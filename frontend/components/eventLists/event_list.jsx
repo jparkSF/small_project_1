@@ -97,6 +97,8 @@ class EventList extends React.Component {
     let searcKeywords = this.state.search.split(" ")
     const eventKeys = Object.keys(this.state.eventKeys);
     const labels = Object.keys(this.state.eventScores)
+
+    console.log(eventKeys,labels)
     let filteredLabel = [];
     // console.log(eventKeys)
     if (!isEmpty(labels)) {
