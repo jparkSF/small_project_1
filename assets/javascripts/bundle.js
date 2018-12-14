@@ -28680,6 +28680,7 @@ var EventList = function (_React$Component) {
   _createClass(EventList, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+
       var events = this.props.fetchData();
       var chopped = events.data.data.mockResponse;
 
@@ -28779,6 +28780,8 @@ var EventList = function (_React$Component) {
     key: 'getEventDetails',
     value: function getEventDetails(event) {
 
+      // $('.lower-content').empty()
+
       this.setState({ eventDetailKey: event });
     }
   }, {
@@ -28802,7 +28805,7 @@ var EventList = function (_React$Component) {
 
         var filteredLabels = this.filterEventsBySearch();
         var filteredEvents = this.makeUniqueEvents(filteredLabels);
-        console.log(eventScores);
+        // console.log(eventScores)
         return _react2.default.createElement(
           'div',
           null,
@@ -28839,12 +28842,12 @@ var EventList = function (_React$Component) {
               _react2.default.createElement(
                 'ul',
                 { id: 'events', className: 'horizontal-list ' },
-                filteredEvents.map(function (event) {
+                filteredEvents.map(function (event, idx) {
                   return _react2.default.createElement(
                     'a',
                     { id: 'event-name-tag', className: 'list-items grid-item no-margin', onClick: function onClick() {
                         return _this3.getEventDetails(event);
-                      } },
+                      }, key: idx },
                     _react2.default.createElement(
                       'div',
                       { style: { backgroundImage: 'url(' + eventLib[event] + ')', backgroundSize: "100% 100%" } },
@@ -29106,14 +29109,9 @@ var EventDetail = function (_React$Component) {
   }
 
   _createClass(EventDetail, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      $('grid-wrapper').empty();
-    }
-  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      // console.log(this.props)
+
       this.setState({
         events: this.props.allEvents,
         eventKeys: this.props.eventKeys,
@@ -29192,6 +29190,7 @@ var EventDetail = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+
       var currEvent = this.state.eventName;
       var allEvents = this.state.events;
 
@@ -29266,12 +29265,17 @@ var EventPredictionTile = function (_React$Component) {
   }
 
   _createClass(EventPredictionTile, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      // console.log('1')
+    }
+  }, {
     key: 'destructEvents',
     value: function destructEvents(filteredEvents) {
       var sortedEvents = this.sortByTimestamp(filteredEvents);
-
-      return sortedEvents.map(function (event) {
-        return _react2.default.createElement(_prediction_tile2.default, { event: event });
+      console.log(filteredEvents);
+      return sortedEvents.map(function (event, idx) {
+        return _react2.default.createElement(_prediction_tile2.default, { event: event, key: idx });
       });
     }
   }, {
@@ -29286,6 +29290,7 @@ var EventPredictionTile = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      // console.log('2')
       var events = this.props.events;
       return _react2.default.createElement(
         'ul',
@@ -29344,53 +29349,33 @@ var PredictionTile = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (PredictionTile.__proto__ || Object.getPrototypeOf(PredictionTile)).call(this, props));
 
     _this.state = {
-      currDetectionId: 0
+      event: {},
+      currDetectionId: 0,
+      predictions: []
     };
     return _this;
   }
 
   _createClass(PredictionTile, [{
-    key: 'destructEvents',
-    value: function destructEvents(filteredEvents) {
-      var sortedEvents = this.sortByTimestamp(filteredEvents);
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.setState({
+        event: this.props.event,
+        predictions: this.props.event.predictions
+      });
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
 
-      return sortedEvents.map(function (event) {
-        var date = new Date(event.timestamp);
-        var parsedDate = date.getFullYear() + ' / ' + (date.getMonth() + 1) + ' / ' + date.getDate() + ', ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+      var event = nextProps.event;
+      var currDetectionId = 0;
+      var predictions = nextProps.event.predictions;
 
-        return _react2.default.createElement(
-          'li',
-          { className: 'grid-item' },
-          _react2.default.createElement('div', { id: 'tile-thumbnail', style: { backgroundImage: 'url(' + event.imageSource + ')' } }),
-          _react2.default.createElement(
-            'p',
-            null,
-            event.videoStream
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            parsedDate
-          ),
-          _react2.default.createElement(
-            'p',
-            null,
-            event.predictions.map(function (el) {
-              var scores = el.scores;
-              return scores.map(function (score) {
-                return _react2.default.createElement(
-                  'span',
-                  null,
-                  score.label,
-                  ', ',
-                  score.score,
-                  '%',
-                  _react2.default.createElement('br', null)
-                );
-              });
-            })
-          )
-        );
+      this.setState({
+        event: event,
+        currDetectionId: currDetectionId,
+        predictions: predictions
       });
     }
   }, {
@@ -29399,7 +29384,6 @@ var PredictionTile = function (_React$Component) {
       var sortedEvents = filteredEvents.sort(function (a, b) {
         return a.timestamp - b.timestamp;
       });
-
       return sortedEvents;
     }
   }, {
@@ -29434,14 +29418,14 @@ var PredictionTile = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var event = this.props.event;
-      var detectionLength = event.predictions.length;
-      var currDetectionId = this.state.currDetectionId;
-      var detection = event.predictions[currDetectionId];
+      var event = this.state.event;
 
       if (!event) {
         return null;
       } else {
+        var detectionLength = this.state.predictions.length;
+        var currDetectionId = this.state.currDetectionId;
+        var detection = this.state.predictions[currDetectionId];
         var date = new Date(event.timestamp);
         var parsedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ', ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
         return _react2.default.createElement(
@@ -29453,7 +29437,7 @@ var PredictionTile = function (_React$Component) {
             { id: 'timestamp' },
             parsedDate
           ),
-          detectionLength == 1 ? null : _react2.default.createElement(
+          detectionLength == 1 ? _react2.default.createElement('div', null) : _react2.default.createElement(
             'div',
             null,
             _react2.default.createElement(
@@ -29482,10 +29466,10 @@ var PredictionTile = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { id: 'detection-scores' },
-            detection.scores.map(function (score) {
+            detection.scores.map(function (score, idx) {
               return _react2.default.createElement(
                 'div',
-                null,
+                { key: idx },
                 _react2.default.createElement(
                   'p',
                   null,

@@ -17,12 +17,10 @@ class EventDetail extends React.Component {
     }
   }
 
-  componentWillMount() {
-    $('grid-wrapper').empty();
-  }
+  
 
   componentDidMount(){
-    // console.log(this.props)
+  
     this.setState({
       events: this.props.allEvents,
       eventKeys: this.props.eventKeys,
@@ -63,6 +61,7 @@ class EventDetail extends React.Component {
   }
 
   render() {
+    
     let currEvent = this.state.eventName
     let allEvents = this.state.events
 

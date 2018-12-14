@@ -8,53 +8,38 @@ class PredictionTile extends React.Component {
     super(props);
 
     this.state = {
-      currDetectionId: 0
+      event: {},
+      currDetectionId: 0,
+      predictions: []
     }
   }
-
-
-  destructEvents(filteredEvents) {
-    let sortedEvents = this.sortByTimestamp(filteredEvents)
-
-    return (
-      sortedEvents.map(event => {
-        let date = new Date(event.timestamp)
-        let parsedDate = `${date.getFullYear()} / ${date.getMonth() + 1} / ${date.getDate()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-
-        return (
-          <li className="grid-item">
-          
-            <div id="tile-thumbnail" style={{backgroundImage: `url(${event.imageSource})`}}></div>
-            <p>{event.videoStream}</p>
-            <p>{parsedDate}</p>
-            <p>
-              {
-                event.predictions.map(el => {
-                  let scores = el.scores
-                  return (
-                    scores.map(score => {
-                      return (
-                        <span>{score.label}, {score.score}%<br /></span>
-                      )
-                    })
-                  )
-                })
-              }
-            </p>
-          </li>
-        )
-      })
-    )
+  componentWillMount(){
+    this.setState({
+      event: this.props.event,
+      predictions: this.props.event.predictions
+    })
   }
 
+  componentWillReceiveProps(nextProps){
+    
+    let event = nextProps.event
+    let currDetectionId = 0
+    let predictions = nextProps.event.predictions
+
+    this.setState({
+      event,
+      currDetectionId,
+      predictions
+    })
+  }
 
   sortByTimestamp(filteredEvents) {
     let sortedEvents = filteredEvents.sort((a, b) => {
       return a.timestamp - b.timestamp
     })
-
     return sortedEvents
   }
+
 
   handleClick(str, detectionLength){
     let currDetectionId = this.state.currDetectionId;
@@ -85,14 +70,14 @@ class PredictionTile extends React.Component {
 
 
   render() {
-    let event = this.props.event
-    let detectionLength = event.predictions.length
-    let currDetectionId = this.state.currDetectionId
-    let detection = event.predictions[currDetectionId]
-
+    let event = this.state.event
+    
     if(!event){
       return (null)
     } else {
+      let detectionLength = this.state.predictions.length
+      let currDetectionId = this.state.currDetectionId
+      let detection = this.state.predictions[currDetectionId]
       let date =  new Date(event.timestamp)
       let parsedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
       return (
@@ -102,7 +87,7 @@ class PredictionTile extends React.Component {
           <p id="timestamp">{parsedDate}</p>
           
           {
-            detectionLength == 1 ? null : 
+            detectionLength == 1 ? <div></div> : 
               <div>
                 <p id="detection">Detection {currDetectionId + 1}/{detectionLength}</p>
                 <button onClick={() => this.handleClick('left', detectionLength)}>left</button>
@@ -113,9 +98,9 @@ class PredictionTile extends React.Component {
           
           <div id="detection-scores">
             { 
-              detection.scores.map(score => {
+              detection.scores.map((score,idx) => {
                 return (
-                  <div> 
+                  <div key={idx}> 
                     <p>
                       <span>{score.label}</span>
                       <span>{(score.score).toFixed(2)} %</span>

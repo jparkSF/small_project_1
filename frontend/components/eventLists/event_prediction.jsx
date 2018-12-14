@@ -9,13 +9,17 @@ class EventPredictionTile extends React.Component {
     super(props);
   }
 
+  componentWillMount(){
+    // console.log('1')
+  }
+
   destructEvents(filteredEvents) {
     let sortedEvents = this.sortByTimestamp(filteredEvents)
-    
+    console.log(filteredEvents)
     return (
-      sortedEvents.map(event => {
+      sortedEvents.map((event, idx) => {
         return (
-          <PredictionTile event={event} />
+          <PredictionTile event={event} key={idx} />
         )
       })
     )
@@ -32,6 +36,7 @@ class EventPredictionTile extends React.Component {
 
 
   render() {
+    // console.log('2')
     let events = this.props.events
     return(
       <ul className="grid-container">

@@ -18,6 +18,7 @@ class EventList extends React.Component {
 
   
   componentDidMount() {
+    
     let events = this.props.fetchData()
     let chopped = events.data.data.mockResponse
 
@@ -120,7 +121,11 @@ class EventList extends React.Component {
 
   getEventDetails(event){
     
+    // $('.lower-content').empty()
+    
     this.setState({eventDetailKey: event})
+    
+
   }
 
   render() {
@@ -138,7 +143,7 @@ class EventList extends React.Component {
       
       let filteredLabels = this.filterEventsBySearch()
       let filteredEvents = this.makeUniqueEvents(filteredLabels)
-      console.log(eventScores)
+      // console.log(eventScores)
       return (
         <div>
           {/*SEARCH BAR */}
@@ -157,9 +162,9 @@ class EventList extends React.Component {
               <div className="carousel-title">Featured Events</div>
               <ul id="events" className="horizontal-list ">
                 {
-                  filteredEvents.map(event => {
+                  filteredEvents.map((event, idx) => {
                     return(
-                      <a id="event-name-tag" className="list-items grid-item no-margin" onClick={() => this.getEventDetails(event)}>
+                      <a id="event-name-tag" className="list-items grid-item no-margin" onClick={() => this.getEventDetails(event)} key={idx}>
                         <div style={{ backgroundImage: `url(${eventLib[event]})`, backgroundSize: "100% 100%" }}>
                           <li className="" key={`${event}+${uniqueId()}`}>  
                             <p>{event}</p>
@@ -173,6 +178,7 @@ class EventList extends React.Component {
              
             </div>
             <div className="lower-content">
+              
               <EventDetail
                 allEvents={this.state.events.events}
                 eventName={this.state.eventDetailKey}
