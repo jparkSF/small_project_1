@@ -16,15 +16,11 @@ class EventList extends React.Component {
 
   }
 
-  
   componentDidMount() {
-    
     let events = this.props.fetchData()
     let chopped = events.data.data.mockResponse
+    let eventsProcessed = this.processKeywords(chopped)
 
-
-    let eventsProcessed  = this.processKeywords(chopped)
-    
     this.setState({
       events: chopped,
       eventKeys: eventsProcessed.keys,
@@ -36,13 +32,11 @@ class EventList extends React.Component {
     let eventKeys = {}
     let eventScores = {}
     data.events.forEach(event => {
-
-      
       let currEvent = event.videoStream
       let predictions = event.predictions
 
       eventKeys[currEvent] = event.imageSource
-      
+
       predictions.forEach(prediction => {
         let objects = prediction.scores
 
@@ -67,26 +61,24 @@ class EventList extends React.Component {
     })
 
     return {
-      keys : eventKeys,
-      scores : eventScores
+      keys: eventKeys,
+      scores: eventScores
     }
 
   }
 
   update(e) {
-    e.preventDefault();
-
-    const search = 'search'
-    return (
+    let data = e.currentTarget.value
+    this.debounce(function (event) {
       this.setState({
-        [search]: e.currentTarget.value
+        search: data
       })
-    )
+    }, 400).bind(this)();
   }
 
   debounce(func, wait) {
     let timeout;
-    
+
     return function () {
       let context = this, args = arguments;
       let later = function () {
@@ -101,7 +93,7 @@ class EventList extends React.Component {
     };
   }
 
-  filterEventsBySearch(){
+  filterEventsBySearch() {
     let searcKeywords = this.state.search.split(" ")
     const eventKeys = Object.keys(this.state.eventKeys);
     const labels = Object.keys(this.state.eventScores)
@@ -116,38 +108,36 @@ class EventList extends React.Component {
         }
       );
     }
-    
+
     return filteredLabel
   }
 
-  makeUniqueEvents(labels){
-    
+  makeUniqueEvents(labels) {
+
     let eventScores = this.state.eventScores
     let filteredEvents = {}
 
     labels.forEach(label => {
       let currLabel = eventScores[label].videoStream
-      if (!filteredEvents[currLabel]){
+      if (!filteredEvents[currLabel]) {
         filteredEvents[currLabel] = true
       }
     })
     let filteredEventKeys = Object.keys(filteredEvents)
-    
+
     return filteredEventKeys
   }
 
-  getEventDetails(event){
-    
-    // $('.lower-content').empty()
-    
-    this.setState({eventDetailKey: event})
-    
+  getEventDetails(event) {
+
+    this.setState({ eventDetailKey: event })
+
 
   }
 
   render() {
     let data = this.state.events
-    
+
     if (!data) {
       return (
         <div>hello</div>
@@ -157,14 +147,14 @@ class EventList extends React.Component {
       let eventLib = this.state.eventKeys
       let eventScores = this.state.eventScores
       let eventKeys = Object.keys(eventLib)
-      
+
       let filteredLabels = this.filterEventsBySearch()
       let filteredEvents = this.makeUniqueEvents(filteredLabels)
       // console.log(eventScores)
       return (
         <div>
           {/*SEARCH BAR */}
-          <section className="section-wrapper"> 
+          <section className="section-wrapper">
             <div>
               <h4 id="controls-title" className='fit-content'>Detector Gallery</h4>
               <p id="controls-description" className='fit-content'>Browse, discover, and use high quality detectors created by the Matroid community.</p>
@@ -174,16 +164,16 @@ class EventList extends React.Component {
 
           {/* EVENT INDEX */}
           <section className="section-wrapper">
-            
+
             <div id="eventIndex" className="event-container">
               <div className="carousel-title">Featured Events</div>
               <ul id="events" className="horizontal-list ">
                 {
                   filteredEvents.map((event, idx) => {
-                    return(
+                    return (
                       <a id="event-name-tag" className="list-items grid-item no-margin" onClick={() => this.getEventDetails(event)} key={idx}>
                         <div style={{ backgroundImage: `url(${eventLib[event]})`, backgroundSize: "100% 100%" }}>
-                          <li className="" key={`${event}+${uniqueId()}`}>  
+                          <li className="" key={`${event}+${uniqueId()}`}>
                             <p>{event}</p>
                           </li>
                         </div>
@@ -192,10 +182,10 @@ class EventList extends React.Component {
                   })
                 }
               </ul>
-             
+
             </div>
             <div className="lower-content">
-              
+
               <EventDetail
                 allEvents={this.state.events.events}
                 eventName={this.state.eventDetailKey}

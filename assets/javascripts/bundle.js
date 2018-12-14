@@ -28652,8 +28652,6 @@ var _event_detail2 = _interopRequireDefault(_event_detail);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -28680,10 +28678,8 @@ var EventList = function (_React$Component) {
   _createClass(EventList, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-
       var events = this.props.fetchData();
       var chopped = events.data.data.mockResponse;
-
       var eventsProcessed = this.processKeywords(chopped);
 
       this.setState({
@@ -28698,7 +28694,6 @@ var EventList = function (_React$Component) {
       var eventKeys = {};
       var eventScores = {};
       data.events.forEach(function (event) {
-
         var currEvent = event.videoStream;
         var predictions = event.predictions;
 
@@ -28735,10 +28730,12 @@ var EventList = function (_React$Component) {
   }, {
     key: 'update',
     value: function update(e) {
-      e.preventDefault();
-
-      var search = 'search';
-      return this.setState(_defineProperty({}, search, e.currentTarget.value));
+      var data = e.currentTarget.value;
+      this.debounce(function (event) {
+        this.setState({
+          search: data
+        });
+      }, 400).bind(this)();
     }
   }, {
     key: 'debounce',
@@ -28798,8 +28795,6 @@ var EventList = function (_React$Component) {
   }, {
     key: 'getEventDetails',
     value: function getEventDetails(event) {
-
-      // $('.lower-content').empty()
 
       this.setState({ eventDetailKey: event });
     }
