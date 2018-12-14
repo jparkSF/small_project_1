@@ -329,3 +329,14 @@ input[type="text"] {
   transition-delay: 0.2s;
   
 }
+
+.result-inspection{
+  margin: 5px 15px;
+  display: flex;
+  justify-content: space-between;
+
+}
+.result-inspection > p > i {
+  margin-left: 5px;
+  padding-top: 4px;
+}

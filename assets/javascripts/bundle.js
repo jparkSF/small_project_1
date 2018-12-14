@@ -29365,13 +29365,11 @@ var PredictionTile = function (_React$Component) {
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-
       var event = nextProps.event;
       var currDetectionId = 0;
       var predictions = nextProps.event.predictions;
 
       this.setState({
-
         event: event,
         currDetectionId: currDetectionId,
         predictions: predictions
@@ -29436,6 +29434,48 @@ var PredictionTile = function (_React$Component) {
       }
     }
   }, {
+    key: 'changeStatus',
+    value: function changeStatus(str) {
+      var key = str === "up" ? "up" : "down";
+
+      var targetNode = $('i#' + key)[this.state.index];
+      var $targetNode = $(targetNode);
+
+      switch (key) {
+        case 'up':
+          if ($targetNode.hasClass("far")) {
+            $targetNode.addClass("fas").removeClass("far");
+
+            // check if down button is already clicked
+            var downButton = $('i#down')[this.state.index];
+            var $downButton = $(downButton);
+
+            if ($downButton.hasClass("fas")) {
+              $downButton.addClass("far").removeClass("fas");
+            }
+          } else {
+            $targetNode.addClass("far").removeClass("fas");
+          }
+
+          break;
+
+        case 'down':
+          if ($targetNode.hasClass("far")) {
+            $targetNode.addClass("fas").removeClass("far");
+            // check if up button is already clicked
+            var upButton = $('i#up')[this.state.index];
+            var $upButton = $(upButton);
+
+            if ($upButton.hasClass("fas")) {
+              $upButton.addClass("far").removeClass("fas");
+            }
+          } else {
+            $targetNode.addClass("far").removeClass("fas");
+          }
+          break;
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -29454,10 +29494,10 @@ var PredictionTile = function (_React$Component) {
         var date = new Date(event.timestamp);
         var parsedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ', ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
         var bound = detection.boundingBox;
-
+        var inspectionLabel = '';
         var boundingArea = {
-          top: 'calc(100% * ' + bound.top + ')',
-          left: 'calc(100% * ' + bound.left + ')',
+          top: 'calc((100% * ' + bound.top + ') + 2px)',
+          left: 'calc((100% * ' + bound.left + ') + 2px)',
           width: 'calc(100% * ' + bound.width,
           height: 'calc(100% * ' + bound.height + ')'
         };
@@ -29531,6 +29571,7 @@ var PredictionTile = function (_React$Component) {
                 _react2.default.createElement(
                   'p',
                   null,
+                  inspectionLabel = score.label,
                   _react2.default.createElement(
                     'span',
                     null,
@@ -29550,6 +29591,31 @@ var PredictionTile = function (_React$Component) {
                 )
               );
             })
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'result-inspection' },
+            _react2.default.createElement(
+              'p',
+              null,
+              'is this ',
+              _react2.default.createElement(
+                'b',
+                null,
+                inspectionLabel
+              ),
+              '?'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              _react2.default.createElement('i', { id: 'up', className: 'far fa-thumbs-up text-success', onClick: function onClick() {
+                  return _this2.changeStatus('up');
+                } }),
+              _react2.default.createElement('i', { id: 'down', className: 'far fa-thumbs-down text-danger', onClick: function onClick() {
+                  return _this2.changeStatus('down');
+                } })
+            )
           )
         );
       }

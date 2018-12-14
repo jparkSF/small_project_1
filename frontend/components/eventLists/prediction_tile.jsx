@@ -22,13 +22,11 @@ class PredictionTile extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-    
     let event = nextProps.event
     let currDetectionId = 0
     let predictions = nextProps.event.predictions
     
     this.setState({
-      
       event,
       currDetectionId,
       predictions
@@ -104,6 +102,47 @@ class PredictionTile extends React.Component {
     
   }
 
+  changeStatus(str){
+    let key = str === "up" ? "up" : "down"
+    
+    let targetNode = $(`i#${key}`)[this.state.index]
+    let $targetNode = $(targetNode)
+    
+    switch(key){
+      case 'up':
+        if($targetNode.hasClass("far")){
+          $targetNode.addClass("fas").removeClass("far")
+          
+          // check if down button is already clicked
+          let downButton = $('i#down')[this.state.index]
+          let $downButton = $(downButton)
+
+          if($downButton.hasClass("fas")){
+            $downButton.addClass("far").removeClass("fas")
+          }
+        } else {
+          $targetNode.addClass("far").removeClass("fas")
+        }
+        
+        break;
+      
+      case 'down':
+        if ($targetNode.hasClass("far")) {
+          $targetNode.addClass("fas").removeClass("far")
+          // check if up button is already clicked
+          let upButton = $('i#up')[this.state.index]
+          let $upButton = $(upButton)
+
+          if ($upButton.hasClass("fas")) {
+            $upButton.addClass("far").removeClass("fas")
+          }
+        } else {
+          $targetNode.addClass("far").removeClass("fas")
+        }
+        break;
+    }
+  }
+
   render() {
     let event = this.state.event
     
@@ -117,10 +156,10 @@ class PredictionTile extends React.Component {
       let date =  new Date(event.timestamp)
       let parsedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
       let bound = detection.boundingBox
-      
+      let inspectionLabel = ''
       let boundingArea = {
-        top: `calc(100% * ${(bound.top)})`,
-        left: `calc(100% * ${(bound.left)})`,
+        top: `calc((100% * ${(bound.top)}) + 2px)`,
+        left: `calc((100% * ${(bound.left)}) + 2px)`,
         width: `calc(100% * ${bound.width}`,
         height: `calc(100% * ${bound.height})`
       }
@@ -161,6 +200,7 @@ class PredictionTile extends React.Component {
                 return (
                   <div id="score-details" key={idx}> 
                     <p>
+                      {inspectionLabel = score.label}
                       <span>{score.label}</span>
                       <span>{(score.score).toFixed(2)} %</span>
                     </p>
@@ -171,6 +211,14 @@ class PredictionTile extends React.Component {
                 )
               })
             }
+          </div>
+          <div className="result-inspection">
+            <p>is this <b>{inspectionLabel}</b>?</p>
+            <p>
+              {/* up and down feedback won't be stored in DB, thus it resets every refresh of the page */}
+              <i id="up" className="far fa-thumbs-up text-success" onClick={() => this.changeStatus('up')}></i>
+              <i id="down" className="far fa-thumbs-down text-danger" onClick={() => this.changeStatus('down')}></i>
+            </p>
           </div>
         </li>
       )
