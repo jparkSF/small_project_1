@@ -29328,6 +29328,8 @@ var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -29422,6 +29424,7 @@ var PredictionTile = function (_React$Component) {
         var detection = this.state.predictions[currDetectionId];
         var date = new Date(event.timestamp);
         var parsedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ', ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        var progressBarStyle = {};
         return _react2.default.createElement(
           'li',
           { className: 'grid-item prediction-tile' },
@@ -29433,37 +29436,52 @@ var PredictionTile = function (_React$Component) {
           ),
           detectionLength == 1 ? _react2.default.createElement('div', null) : _react2.default.createElement(
             'div',
-            null,
+            { id: 'detection' },
+            _react2.default.createElement(
+              'a',
+              { onClick: function onClick() {
+                  return _this2.handleClick('left', detectionLength);
+                } },
+              _react2.default.createElement('i', { className: 'fas fa-arrow-left' })
+            ),
             _react2.default.createElement(
               'p',
-              { id: 'detection' },
+              { id: '' },
               'Detection ',
               currDetectionId + 1,
               '/',
               detectionLength
             ),
             _react2.default.createElement(
-              'button',
-              { onClick: function onClick() {
-                  return _this2.handleClick('left', detectionLength);
-                } },
-              'left'
-            ),
-            _react2.default.createElement(
-              'button',
+              'a',
               { onClick: function onClick() {
                   return _this2.handleClick('right', detectionLength);
                 } },
-              'right'
+              _react2.default.createElement('i', { className: 'fas fa-arrow-right' })
             )
           ),
+          _react2.default.createElement('hr', null),
           _react2.default.createElement(
             'div',
             { id: 'detection-scores' },
             detection.scores.map(function (score, idx) {
+              var _React$createElement;
+
+              var confidence = score.score;
+              var scoreColor = '';
+              if (confidence <= 25) {
+                scoreColor = 'bg-danger';
+              } else if (confidence <= 50) {
+                scoreColor = 'bg-warning';
+              } else if (confidence <= 75) {
+                scoreColor = 'bg-info';
+              } else {
+                scoreColor = 'bg-success';
+              }
+
               return _react2.default.createElement(
                 'div',
-                { key: idx },
+                { id: 'score-details', key: idx },
                 _react2.default.createElement(
                   'p',
                   null,
@@ -29480,9 +29498,9 @@ var PredictionTile = function (_React$Component) {
                   )
                 ),
                 _react2.default.createElement(
-                  'p',
-                  null,
-                  'graph'
+                  'div',
+                  { className: 'progress' },
+                  _react2.default.createElement('div', (_React$createElement = { className: 'progress-bar ' + scoreColor, role: 'progressbar', style: { width: score.score + '%' }, 'aria-valuenow': score.score }, _defineProperty(_React$createElement, 'aria-valuenow', '0'), _defineProperty(_React$createElement, 'aria-valuemin', '0'), _defineProperty(_React$createElement, 'aria-valuemax', '100'), _React$createElement))
                 )
               );
             })

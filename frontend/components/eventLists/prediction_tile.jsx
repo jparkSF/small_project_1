@@ -80,35 +80,47 @@ class PredictionTile extends React.Component {
       let detection = this.state.predictions[currDetectionId]
       let date =  new Date(event.timestamp)
       let parsedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      let progressBarStyle = {
+        
+
+      }
       return (
         <li className="grid-item prediction-tile">
-          
           <img src={event.imageSource} alt=""/>
           <p id="timestamp">{parsedDate}</p>
-          
           {
             detectionLength == 1 ? <div></div> : 
-              <div>
-                <p id="detection">Detection {currDetectionId + 1}/{detectionLength}</p>
-                <button onClick={() => this.handleClick('left', detectionLength)}>left</button>
-                <button onClick={() => this.handleClick('right', detectionLength)}>right</button>
+              <div id="detection">
+                <a onClick={() => this.handleClick('left', detectionLength)}><i className="fas fa-arrow-left"></i></a>
+                <p id="">Detection {currDetectionId + 1}/{detectionLength}</p>
+                <a onClick={() => this.handleClick('right', detectionLength)}><i className="fas fa-arrow-right"></i></a>
               </div>
           }
-          
-          
+          <hr />
           <div id="detection-scores">
             { 
               detection.scores.map((score,idx) => {
+                let confidence = score.score;
+                let scoreColor = ''
+                if(confidence <= 25){
+                  scoreColor = 'bg-danger'
+                } else if (confidence <= 50){
+                  scoreColor = 'bg-warning'
+                } else if (confidence <= 75){
+                  scoreColor = 'bg-info'
+                } else {
+                  scoreColor = 'bg-success'
+                }
+
                 return (
-                  <div key={idx}> 
+                  <div id="score-details" key={idx}> 
                     <p>
                       <span>{score.label}</span>
                       <span>{(score.score).toFixed(2)} %</span>
                     </p>
-                    <p>
-                      graph
-                    </p>
-                    
+                    <div className="progress">
+                      <div className={`progress-bar ${scoreColor}`} role="progressbar" style={{width: `${score.score}%`}} aria-valuenow={score.score} aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                   </div>
                 )
               })
@@ -118,7 +130,6 @@ class PredictionTile extends React.Component {
       )
     }
   }
-
 }
 
 export default PredictionTile;

@@ -1,6 +1,14 @@
+* {
+  /* color: #555; */
+}
 body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color:#f4f4f4;
+  
+}
+
+p{
+  margin:0;
 }
 
 img{
@@ -77,7 +85,7 @@ ul{
 }
 #event-name-tag > div > li > p{
   padding: 3px 7px;
-  background: rgba(0,0,0,0.7)
+  background: rgba(0,0,0,0.8)
   
 }
 
@@ -228,7 +236,7 @@ input[type="text"] {
 }
 
 .prediction-tile:hover{
-    background: rgba(238, 163, 32, 0.7);
+    background: rgba(241, 158, 33, 0.705);
     transition-duration: 0.2s;
     transform: translate(-2px, -2px);
 }
@@ -239,6 +247,10 @@ input[type="text"] {
   width: auto;
   height: auto;
   max-width: 100%; 
+}
+
+.prediction-tile > hr {
+  margin: 3px 0;
 }
 
 #detection-scores{
@@ -254,6 +266,7 @@ input[type="text"] {
 }
 
 #timestamp{
+  margin: 0;
   transform: translate(0%, -100%);
   color: white;
   font-size: 0.8rem;
@@ -264,8 +277,27 @@ input[type="text"] {
 }
 
 #detection{
-  margin-top: 15px;
-  background-color: #33323a;
-  color: white;
+  margin: -15px 10px 0 10px;
   font-weight: 500;
+  display: flex;
+  justify-content: space-between;
 }
+
+#detection > p{
+  margin: 0;
+}
+#detection > a {
+  padding-top: 3px;
+  font-size: 1.1rem;
+  
+}
+
+#score-details{
+  margin: 15px 0 10px 0;
+}
+
+.progress{
+  margin-top: 8px;
+  height: 12px;
+}
+
