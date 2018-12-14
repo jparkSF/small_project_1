@@ -29270,7 +29270,8 @@ var EventPredictionTile = function (_React$Component) {
       var sortedEvents = this.sortByTimestamp(filteredEvents);
 
       return sortedEvents.map(function (event, idx) {
-        return _react2.default.createElement(_prediction_tile2.default, { event: event, key: idx });
+
+        return _react2.default.createElement(_prediction_tile2.default, { event: event, key: idx, tileIndex: idx });
       });
     }
   }, {
@@ -29347,7 +29348,8 @@ var PredictionTile = function (_React$Component) {
     _this.state = {
       event: {},
       currDetectionId: 0,
-      predictions: []
+      predictions: [],
+      index: props.tileIndex
     };
     return _this;
   }
@@ -29369,6 +29371,7 @@ var PredictionTile = function (_React$Component) {
       var predictions = nextProps.event.predictions;
 
       this.setState({
+
         event: event,
         currDetectionId: currDetectionId,
         predictions: predictions
@@ -29410,6 +29413,29 @@ var PredictionTile = function (_React$Component) {
       }
     }
   }, {
+    key: 'onMouse',
+    value: function onMouse(event) {
+      var eventType = event.type;
+      var bounds = this.state.predictions[this.state.currDetectionId].boundingBox;
+      var tiles = $('.image-overlay-box');
+      var currentNode = tiles[this.state.index];
+      var $currentNode = $(currentNode);
+      var imageHeight = $currentNode.height();
+      var imageWidth = $currentNode.width();
+
+      var svgShadow = '\n            <svg class="image-overlay-box-shadow"> \n              <path fill="black" opacity="0.7" fill-rule="evenodd"\n                d="M0,0 h' + imageWidth + ' v' + imageHeight + ' h-' + imageWidth + ' v-' + imageHeight + ' z \n                M' + imageWidth * bounds.left + ',' + imageHeight * bounds.top + '\n                h' + imageWidth * bounds.width + '\n                v' + imageHeight * bounds.height + '\n                h-' + imageWidth * bounds.width + '\n                v-' + imageHeight * bounds.height + '\n                z\n              "/>\n            </svg>\n             ';
+
+      switch (eventType) {
+        case 'mouseover':
+          $currentNode.prepend(svgShadow);
+          break;
+
+        case 'mouseout':
+          $currentNode.find(':first-child').remove();
+          break;
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -29422,13 +29448,33 @@ var PredictionTile = function (_React$Component) {
         var detectionLength = this.state.predictions.length;
         var currDetectionId = this.state.currDetectionId;
         var detection = this.state.predictions[currDetectionId];
+        var sortedByScore = detection.scores.sort(function (a, b) {
+          return b.score - a.score;
+        });
         var date = new Date(event.timestamp);
         var parsedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ', ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-        var progressBarStyle = {};
+        var bound = detection.boundingBox;
+
+        var boundingArea = {
+          top: 'calc(100% * ' + bound.top + ')',
+          left: 'calc(100% * ' + bound.left + ')',
+          width: 'calc(100% * ' + bound.width,
+          height: 'calc(100% * ' + bound.height + ')'
+        };
+
         return _react2.default.createElement(
           'li',
           { className: 'grid-item prediction-tile' },
-          _react2.default.createElement('img', { src: event.imageSource, alt: '' }),
+          _react2.default.createElement(
+            'div',
+            { className: 'image-overlay-box' },
+            _react2.default.createElement('img', { id: 'eventImage', src: event.imageSource, alt: '' }),
+            _react2.default.createElement('div', { className: 'image-overlay-bounding-box', onMouseOver: function onMouseOver(e) {
+                return _this2.onMouse(e);
+              }, onMouseOut: function onMouseOut(e) {
+                return _this2.onMouse(e);
+              }, style: boundingArea })
+          ),
           _react2.default.createElement(
             'p',
             { id: 'timestamp' },
@@ -29464,7 +29510,7 @@ var PredictionTile = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { id: 'detection-scores' },
-            detection.scores.map(function (score, idx) {
+            sortedByScore.map(function (score, idx) {
               var _React$createElement;
 
               var confidence = score.score;

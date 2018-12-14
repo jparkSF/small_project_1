@@ -6,11 +6,12 @@ import isEmpty from 'lodash/isEmpty';
 class PredictionTile extends React.Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       event: {},
       currDetectionId: 0,
-      predictions: []
+      predictions: [],
+      index: props.tileIndex
     }
   }
   componentWillMount(){
@@ -25,8 +26,9 @@ class PredictionTile extends React.Component {
     let event = nextProps.event
     let currDetectionId = 0
     let predictions = nextProps.event.predictions
-
+    
     this.setState({
+      
       event,
       currDetectionId,
       predictions
@@ -65,9 +67,42 @@ class PredictionTile extends React.Component {
         }
         break;
     }
-
   }
 
+  onMouse(event){
+    let eventType = event.type;
+    let bounds = this.state.predictions[this.state.currDetectionId].boundingBox;
+    let tiles = $('.image-overlay-box')  
+    let currentNode = tiles[this.state.index];
+    let $currentNode = $(currentNode)
+    let imageHeight = $currentNode.height()
+    let imageWidth = $currentNode.width()
+    
+    let svgShadow = `
+            <svg class="image-overlay-box-shadow"> 
+              <path fill="black" opacity="0.7" fill-rule="evenodd"
+                d="M0,0 h${imageWidth} v${imageHeight} h-${imageWidth} v-${imageHeight} z 
+                M${imageWidth * bounds.left},${imageHeight * (bounds.top)}
+                h${imageWidth * bounds.width}
+                v${imageHeight * bounds.height}
+                h-${imageWidth * bounds.width}
+                v-${imageHeight * bounds.height}
+                z
+              "/>
+            </svg>
+             `
+    
+    switch(eventType){
+      case 'mouseover':
+        $currentNode.prepend(svgShadow)
+        break;
+
+      case 'mouseout':
+        $currentNode.find(':first-child').remove();
+        break;
+    }                 
+    
+  }
 
   render() {
     let event = this.state.event
@@ -78,15 +113,26 @@ class PredictionTile extends React.Component {
       let detectionLength = this.state.predictions.length
       let currDetectionId = this.state.currDetectionId
       let detection = this.state.predictions[currDetectionId]
+      let sortedByScore = detection.scores.sort((a,b) => (b.score - a.score))
       let date =  new Date(event.timestamp)
       let parsedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}, ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-      let progressBarStyle = {
-        
-
+      let bound = detection.boundingBox
+      
+      let boundingArea = {
+        top: `calc(100% * ${(bound.top)})`,
+        left: `calc(100% * ${(bound.left)})`,
+        width: `calc(100% * ${bound.width}`,
+        height: `calc(100% * ${bound.height})`
       }
+      
+
       return (
-        <li className="grid-item prediction-tile">
-          <img src={event.imageSource} alt=""/>
+        <li className="grid-item prediction-tile"> 
+          <div className='image-overlay-box'>
+            <img id="eventImage" src={event.imageSource} alt="" />  
+            <div className='image-overlay-bounding-box' onMouseOver={(e) => this.onMouse(e)} onMouseOut={(e) => this.onMouse(e)} style={boundingArea}>
+            </div>
+          </div>
           <p id="timestamp">{parsedDate}</p>
           {
             detectionLength == 1 ? <div></div> : 
@@ -99,7 +145,7 @@ class PredictionTile extends React.Component {
           <hr />
           <div id="detection-scores">
             { 
-              detection.scores.map((score,idx) => {
+              sortedByScore.map((score,idx) => {
                 let confidence = score.score;
                 let scoreColor = ''
                 if(confidence <= 25){

@@ -14,8 +14,9 @@ class EventPredictionTile extends React.Component {
     
     return (
       sortedEvents.map((event, idx) => {
+        
         return (
-          <PredictionTile event={event} key={idx} />
+          <PredictionTile event={event} key={idx} tileIndex={idx} />
         )
       })
     )
