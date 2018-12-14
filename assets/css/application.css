@@ -254,17 +254,13 @@ input[type="text"] {
 }
 
 #timestamp{
-  position: absolute;
-  top: 2%;
-  left: 50%;
-  transform: translate(-50%, 0);
+  transform: translate(0%, -100%);
   color: white;
   font-size: 0.8rem;
   font-weight: 500;
   background: rgba(0,0,0,0.6);
   display: -webkit-inline-box;
   padding: 0 5px;
-   
 }
 
 #detection{

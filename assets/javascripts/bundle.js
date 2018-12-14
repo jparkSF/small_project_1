@@ -29265,15 +29265,10 @@ var EventPredictionTile = function (_React$Component) {
   }
 
   _createClass(EventPredictionTile, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      // console.log('1')
-    }
-  }, {
     key: 'destructEvents',
     value: function destructEvents(filteredEvents) {
       var sortedEvents = this.sortByTimestamp(filteredEvents);
-      console.log(filteredEvents);
+
       return sortedEvents.map(function (event, idx) {
         return _react2.default.createElement(_prediction_tile2.default, { event: event, key: idx });
       });
@@ -29290,7 +29285,6 @@ var EventPredictionTile = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      // console.log('2')
       var events = this.props.events;
       return _react2.default.createElement(
         'ul',
