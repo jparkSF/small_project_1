@@ -3,7 +3,7 @@ import { uniqueId } from '../../util/id_generator'
 import merge from 'lodash/merge';
 import isEmpty from 'lodash/isEmpty';
 import EventDetail from './event_detail'
-import _ from 'lodash';
+import { DebounceInput } from 'react-debounce-input';
 
 class EventList extends React.Component {
   constructor(props) {
@@ -73,19 +73,12 @@ class EventList extends React.Component {
 
   }
 
-
- 
-  
-
- 
   filterEventsBySearch() {
     let searchKeywords = this.state.search.split(" ")
     const eventKeys = Object.keys(this.state.eventKeys);
     const labels = Object.keys(this.state.eventScores)
-    
-    console.log(searchKeywords)
     let filteredLabel = [];
-    // console.log(eventKeys)
+    
     if (!isEmpty(labels)) {
 
       filteredLabel = labels.filter(
@@ -118,32 +111,15 @@ class EventList extends React.Component {
   }
 
   getEventDetails(event) {
-    
     this.setState({ eventDetailKey: event })
   }
-
-  handleInput(e) {
-    let value = e.currentTarget.value
-    
-    _.debounce((value) => this.update(value),400)()
-    
-  }
-
-  update(value){
-    return (
-      console.log("inside")
-    )
-    
-
-  }
-
 
   render() {
     let data = this.state.events
 
     if (!data) {
       return (
-        <div>hello</div>
+        <div>Loading Data...</div>
       )
     } else {
       let size = data.events.length
@@ -162,7 +138,11 @@ class EventList extends React.Component {
               <h4 id="controls-title" className='fit-content'>Detector Gallery</h4>
               <p id="controls-description" className='fit-content'>Browse, discover, and use high quality detectors created by the Matroid community.</p>
             </div>
-            <input type="text" id="searchField" className="" onChange={this.handleInput.bind(this)} defaultValue={this.state.search} placeholder="Search for detectors by detector information" />
+            
+            <DebounceInput
+              minLength={2}
+              debounceTimeout={400}
+              onChange={event => this.setState({ search: event.target.value })} />
           </section>
 
           {/* EVENT INDEX */}

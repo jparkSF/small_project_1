@@ -69,10 +69,11 @@ class EventDetail extends React.Component {
     let allEvents = this.state.events
 
     let filteredEvents = allEvents.filter(
-      (event) => {
-        return event.videoStream == currEvent
-      }
-    )
+        (event) => {
+          return event.videoStream == currEvent
+        }
+      )
+
       
     
     return (

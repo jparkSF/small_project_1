@@ -35,17 +35,24 @@ class EventPredictionTile extends React.Component {
       )
     } else if (this.state.search.length != 0) {
       let allEvents = this.props.allEvents
-      let search = this.state.search
-      // console.log(search, allEvents)
-
+      let splitSearch = this.state.search.split(" ")
+      let search = splitSearch[0]
+      let searchScore = splitSearch[1]
       let resultLibrary = []
+      
 
       allEvents.map((event, index) => {
         event.predictions.map( prediction => {
           prediction.scores.map( score => {
             if (score.label.toLowerCase().indexOf(search) !== -1){
               if (resultLibrary.length == 0 || resultLibrary[resultLibrary.length - 1] !== allEvents[index]){
-                resultLibrary.push(allEvents[index])
+                if(searchScore){
+                  if(searchScore <= score.score){
+                    resultLibrary.push(allEvents[index])  
+                  }
+                } else {
+                  resultLibrary.push(allEvents[index])
+                }
               }
             }
           })
@@ -55,7 +62,7 @@ class EventPredictionTile extends React.Component {
       let sortedLibrary = resultLibrary.sort( (a,b) => {
         b.timestamp - a.timestamp
       })
-
+   
       return (
         sortedLibrary.map((event, idx) => {
           return (

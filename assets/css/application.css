@@ -98,6 +98,7 @@ ul{
 }
 
 input[type="text"] {
+  padding-left:15px;
   width: 600px;
   height: 35px;
   margin: 50px auto 10px auto;
