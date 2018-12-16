@@ -52,11 +52,11 @@ ul{
   max-width: 800px;
   margin:auto;
   display: flex;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
 }
 .list-items{
   height:200px;
-  opacity:0.7;
+  opacity:0.8;
 }
 
 .list-items:hover {   
@@ -93,7 +93,7 @@ ul{
   /* margin: 15px; */
   width: 100%;
   /* background-color: rgba(255, 255, 255, 0.8); */
-  border: 1px dotted blue;
+  border: 1px solid grey;
   text-align: center;
 }
 

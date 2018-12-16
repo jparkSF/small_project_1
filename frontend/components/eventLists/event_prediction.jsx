@@ -7,19 +7,64 @@ import PredictionTile from './prediction_tile'
 class EventPredictionTile extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      search: ''
+    }
+  }
+
+  componentWillMount() {
+    this.setState({
+      search: this.props.search
+    })
+  }
+  componentWillUpdate(nextProps, nextState){
+    
+    this.state.search = nextProps.search
   }
 
   destructEvents(filteredEvents) {
-    let sortedEvents = this.sortByTimestamp(filteredEvents)
-    
-    return (
-      sortedEvents.map((event, idx) => {
-        
-        return (
-          <PredictionTile event={event} key={idx} tileIndex={idx} />
-        )
+    if(!isEmpty(filteredEvents)){
+      let sortedEvents = this.sortByTimestamp(filteredEvents)
+
+      return (
+        sortedEvents.map((event, idx) => {
+          return (
+            <PredictionTile event={event} key={idx} tileIndex={idx} />
+          )
+        })
+      )
+    } else if (this.state.search.length != 0) {
+      let allEvents = this.props.allEvents
+      let search = this.state.search
+      // console.log(search, allEvents)
+
+      let resultLibrary = []
+
+      allEvents.map((event, index) => {
+        event.predictions.map( prediction => {
+          prediction.scores.map( score => {
+            if (score.label.toLowerCase().indexOf(search) !== -1){
+              if (resultLibrary.length == 0 || resultLibrary[resultLibrary.length - 1] !== allEvents[index]){
+                resultLibrary.push(allEvents[index])
+              }
+            }
+          })
+        })
       })
-    )
+
+      let sortedLibrary = resultLibrary.sort( (a,b) => {
+        b.timestamp - a.timestamp
+      })
+
+      return (
+        sortedLibrary.map((event, idx) => {
+          return (
+            <PredictionTile event={event} key={idx} tileIndex={idx} />
+          )
+        })
+      )
+    }
+    
   }
 
   sortByTimestamp(filteredEvents) {
@@ -31,6 +76,7 @@ class EventPredictionTile extends React.Component {
   }
 
   render() {
+    
     let events = this.props.events
     return(
       <ul className="grid-container">

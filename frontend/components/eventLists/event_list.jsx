@@ -3,6 +3,7 @@ import { uniqueId } from '../../util/id_generator'
 import merge from 'lodash/merge';
 import isEmpty from 'lodash/isEmpty';
 import EventDetail from './event_detail'
+import _ from 'lodash';
 
 class EventList extends React.Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class EventList extends React.Component {
     this.state = {
       events: this.props.event,
       search: '',
-      eventDetailKey: ''
+      eventDetailKey: '',
+      searchResult:[]
     }
 
   }
@@ -26,6 +28,8 @@ class EventList extends React.Component {
       eventKeys: eventsProcessed.keys,
       eventScores: eventsProcessed.scores
     })
+
+
   }
 
   processKeywords(data) {
@@ -58,6 +62,8 @@ class EventList extends React.Component {
           }
         })
       })
+
+
     })
 
     return {
@@ -67,38 +73,17 @@ class EventList extends React.Component {
 
   }
 
-  update(e) {
-    let data = e.currentTarget.value
-    this.debounce(function (event) {
-      this.setState({
-        search: data
-      })
-    }, 400).bind(this)();
-  }
 
-  debounce(func, wait) {
-    let timeout;
+ 
+  
 
-    return function () {
-      let context = this, args = arguments;
-      let later = function () {
-        timeout = null;
-
-        func.apply(context, args);
-      };
-
-      let callNow = !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
-
+ 
   filterEventsBySearch() {
-    let searcKeywords = this.state.search.split(" ")
+    let searchKeywords = this.state.search.split(" ")
     const eventKeys = Object.keys(this.state.eventKeys);
     const labels = Object.keys(this.state.eventScores)
-
-    console.log(eventKeys,labels)
+    
+    console.log(searchKeywords)
     let filteredLabel = [];
     // console.log(eventKeys)
     if (!isEmpty(labels)) {
@@ -106,7 +91,9 @@ class EventList extends React.Component {
       filteredLabel = labels.filter(
         (label) => {
           return label.toLowerCase()
-            .indexOf(this.state.search.toLowerCase()) !== -1;
+            .indexOf(searchKeywords[0].toLowerCase()) !== -1
+            // .indexOf(this.state.search.toLowerCase()) !== -1;
+              
         }
       );
     }
@@ -126,16 +113,30 @@ class EventList extends React.Component {
       }
     })
     let filteredEventKeys = Object.keys(filteredEvents)
-
+    
     return filteredEventKeys
   }
 
   getEventDetails(event) {
-
+    
     this.setState({ eventDetailKey: event })
+  }
 
+  handleInput(e) {
+    let value = e.currentTarget.value
+    
+    _.debounce((value) => this.update(value),400)()
+    
+  }
+
+  update(value){
+    return (
+      console.log("inside")
+    )
+    
 
   }
+
 
   render() {
     let data = this.state.events
@@ -152,7 +153,7 @@ class EventList extends React.Component {
 
       let filteredLabels = this.filterEventsBySearch()
       let filteredEvents = this.makeUniqueEvents(filteredLabels)
-      // console.log(eventScores)
+      
       return (
         <div>
           {/*SEARCH BAR */}
@@ -161,7 +162,7 @@ class EventList extends React.Component {
               <h4 id="controls-title" className='fit-content'>Detector Gallery</h4>
               <p id="controls-description" className='fit-content'>Browse, discover, and use high quality detectors created by the Matroid community.</p>
             </div>
-            <input type="text" id="searchField" className="" onChange={this.update.bind(this)} defaultValue={this.state.search} placeholder="Search for detectors by detector information" />
+            <input type="text" id="searchField" className="" onChange={this.handleInput.bind(this)} defaultValue={this.state.search} placeholder="Search for detectors by detector information" />
           </section>
 
           {/* EVENT INDEX */}
@@ -173,7 +174,7 @@ class EventList extends React.Component {
                 {
                   filteredEvents.map((event, idx) => {
                     return (
-                      <a id="event-name-tag" className="list-items grid-item no-margin" onClick={() => this.getEventDetails(event)} key={idx}>
+                      <a id="event-name-tag" className="list-items grid-item no-margin"  onClick={() => this.getEventDetails(event)} key={idx}>
                         <div style={{ backgroundImage: `url(${eventLib[event]})`, backgroundSize: "100% 100%" }}>
                           <li className="" key={`${event}+${uniqueId()}`}>
                             <p>{event}</p>
@@ -187,8 +188,9 @@ class EventList extends React.Component {
 
             </div>
             <div className="lower-content">
-
+              
               <EventDetail
+                search={this.state.search}
                 allEvents={this.state.events.events}
                 eventName={this.state.eventDetailKey}
                 eventLib={eventLib}
