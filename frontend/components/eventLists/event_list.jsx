@@ -77,16 +77,15 @@ class EventList extends React.Component {
     let searchKeywords = this.state.search.split(" ")
     const eventKeys = Object.keys(this.state.eventKeys);
     const labels = Object.keys(this.state.eventScores)
+    let aggregatedSearchPool = eventKeys.concat(labels)
     let filteredLabel = [];
+
     
     if (!isEmpty(labels)) {
-
       filteredLabel = labels.filter(
         (label) => {
           return label.toLowerCase()
             .indexOf(searchKeywords[0].toLowerCase()) !== -1
-            // .indexOf(this.state.search.toLowerCase()) !== -1;
-              
         }
       );
     }

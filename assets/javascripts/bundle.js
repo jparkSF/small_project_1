@@ -28792,13 +28792,12 @@ var EventList = function (_React$Component) {
       var searchKeywords = this.state.search.split(" ");
       var eventKeys = Object.keys(this.state.eventKeys);
       var labels = Object.keys(this.state.eventScores);
+      var aggregatedSearchPool = eventKeys.concat(labels);
       var filteredLabel = [];
 
       if (!(0, _isEmpty2.default)(labels)) {
-
         filteredLabel = labels.filter(function (label) {
           return label.toLowerCase().indexOf(searchKeywords[0].toLowerCase()) !== -1;
-          // .indexOf(this.state.search.toLowerCase()) !== -1;
         });
       }
 
