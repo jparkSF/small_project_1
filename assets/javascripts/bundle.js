@@ -28872,7 +28872,9 @@ var EventList = function (_React$Component) {
               debounceTimeout: 400,
               onChange: function onChange(event) {
                 return _this2.setState({ search: event.target.value });
-              } })
+              },
+              placeholder: 'Search by label and score. (i.e. \'green 95\')'
+            })
           ),
           _react2.default.createElement(
             'section',

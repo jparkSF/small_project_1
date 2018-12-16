@@ -141,7 +141,9 @@ class EventList extends React.Component {
             <DebounceInput
               minLength={2}
               debounceTimeout={400}
-              onChange={event => this.setState({ search: event.target.value })} />
+              onChange={event => this.setState({ search: event.target.value })} 
+              placeholder="Search by label and score. (i.e. 'green 95')"
+              />
           </section>
 
           {/* EVENT INDEX */}
